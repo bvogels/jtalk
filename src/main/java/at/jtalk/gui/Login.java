@@ -1,21 +1,27 @@
 package at.jtalk.gui;
 
+import at.jtalk.connection.Client;
+import at.jtalk.connection.Server;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
 
+    @FXML
+    private CheckBox runAsServer;
     @FXML
     private TextField ServerPort;
     @FXML
@@ -41,20 +47,43 @@ public class Login implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        labelConnection.setVisible(false);
     }
 
     @FXML
     public void loginAccept(javafx.event.ActionEvent actionEvent) throws IOException {
+        /*
 
-        userData user = new userData(textFieldLogin.getText(), passwordField.getText());
+
+*/
+   //     if(logonisallowed == 1){
+
+        if(!runAsServer.isSelected()){
+            //Connection
+            String serveripaddress = ServerIpField.getText();
+            int serverport = Integer.parseInt(ServerPort.getText());
+            Socket s = Client.connectServer(serveripaddress, serverport);
+            Client client = new Client(s);
+            chatWindow CW = new chatWindow();
+            CW.setClient(client);
+            client.Logon(textFieldLogin.getText(), passwordField.getText());
+
+            //GUI
+            Stage stage = (Stage)loginButton.getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
+        else{
+            int port = Integer.parseInt(textFieldLogin.getText());
+            Server s = new Server(port);
+            s.createServer();
+        }
+
+     //   }
 
 
-        Stage stage = (Stage)loginButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
     }
     @FXML
     public void signUp(javafx.event.ActionEvent actionEvent)throws IOException{
@@ -75,6 +104,7 @@ public class Login implements Initializable {
         passwordLabel.setVisible(false);
         loginButton.setText("Start");
         textFieldLogin.setPromptText("Portnumber");
+        textFieldLogin.setText("4876");
 
     }
 }
