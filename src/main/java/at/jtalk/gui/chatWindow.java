@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import org.w3c.dom.Text;
 
 public class chatWindow{
 
@@ -19,11 +20,18 @@ public class chatWindow{
     private TextArea chatWindowField;
     @FXML
     private TextField groupNameField;
+    @FXML
+    private javafx.scene.control.Label connectionLabel;
+    @FXML
+    private javafx.scene.shape.Circle connectionCircle;
+
+
 
 
     public void sendText(ActionEvent actionEvent) {
 
-        String message = "user: ";
+        String message = "";
+        message +=
         message += messageField.getText();
         messageField.clear();
         chatWindowField.appendText(message+ " \n");

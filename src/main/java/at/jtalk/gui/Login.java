@@ -6,6 +6,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,6 +16,10 @@ import java.util.ResourceBundle;
 
 public class Login implements Initializable {
 
+    @FXML
+    private TextField ServerPort;
+    @FXML
+    private TextField ServerIpField;
     @FXML
     private javafx.scene.control.Button loginButton;
     @FXML
@@ -26,6 +32,13 @@ public class Login implements Initializable {
     private javafx.scene.control.TextField passwordField;
     @FXML
     private javafx.scene.control.TextField textFieldLogin;
+    @FXML
+    private javafx.scene.control.Label connectionLabel;
+    @FXML
+    private javafx.scene.shape.Circle connectionCircle;
+    @FXML
+    private Label labelConnection;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -34,8 +47,10 @@ public class Login implements Initializable {
     @FXML
     public void loginAccept(javafx.event.ActionEvent actionEvent) throws IOException {
 
-        Stage stage = (Stage)loginButton.getScene().getWindow();
+        userData user = new userData(textFieldLogin.getText(), passwordField.getText());
 
+
+        Stage stage = (Stage)loginButton.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
