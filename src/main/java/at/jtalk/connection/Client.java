@@ -5,35 +5,38 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client {
+public class Client extends Listen {
+    private String username;
+    private String password;
     private Socket socket;
 
 
-    public Client(Socket s) {
-        this.socket = socket;
+    public Client(String username, String password) {
+        this.username = username;
+        this.password = password;
+
     }
 
-    public static Socket connectServer(String ipaddress, int port) {
-
+    public void connectServer(String ipaddress, int port) {
         try {
-            Socket s = new Socket(ipaddress, port);
-            return s;
+            socket = new Socket(ipaddress, port);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return null;
-
     }
 
-    public void Logon(String Username, String Password) throws IOException {
+    public void Logon() throws IOException {
             OutputStreamWriter oswriter = new OutputStreamWriter(socket.getOutputStream());
             PrintWriter pwriter = new PrintWriter(oswriter);
-            pwriter.println("Guten Tach!");
+            pwriter.println(username + " "  + password);
             pwriter.flush();
 
         //return 1;
+    }
+
+    public void listen(){
+
     }
 
 

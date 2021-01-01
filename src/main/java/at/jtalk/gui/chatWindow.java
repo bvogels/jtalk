@@ -25,8 +25,6 @@ public class chatWindow{
     @FXML
     private javafx.scene.shape.Circle connectionCircle;
 
-
-
     private Client client;
 
 
@@ -34,12 +32,12 @@ public class chatWindow{
 
        // client.send();
 
-
+    /*
         String message = "user: ";
         message += messageField.getText();
         messageField.clear();
         chatWindowField.appendText(message+ " \n");
-
+    */
 
     }
 

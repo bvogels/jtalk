@@ -6,18 +6,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
-public class Server {
+public class Server extends Listen {
     private final int PORT;
+    private static List<Socket> sockets;
 
     public Server(int PORT) {
         this.PORT = PORT;
     }
 
-    public void createServer() {
+    public void addSocketToList(Socket s){
+        sockets.add(s);
+    }
+
+    public void listen() {
         try {
             ServerSocket ServerSocket = new ServerSocket(PORT);
             Socket s = ServerSocket.accept();
+            sockets.add(s);
             checkusernamepassword(s);
 
         } catch (IOException e) {
@@ -30,24 +37,12 @@ public class Server {
         System.out.println(bfreader.readLine());
 
     }
-/*
-    listen()
-        if(in nachricht is signin::::::)
-            int returnvalue = checkusernamepassword(nachricht)
-            schicke zurück(returvale)
+    public void send(){
 
+    }
+    public void signin(){
 
-
-
-    checkusernamepassword()
-        for file1
-            if username == use
-
-    writetexttouser()
-
-    signin()
-*/
-
+    }
 }
 
 //    InputStreamReader isreader = new InputStreamReader(s.getInputStream());
