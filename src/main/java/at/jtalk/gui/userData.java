@@ -1,4 +1,4 @@
-package at.jtalk;
+package at.jtalk.gui;
 
 public class userData {
 

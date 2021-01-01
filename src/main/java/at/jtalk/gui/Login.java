@@ -1,4 +1,4 @@
-package at.jtalk;
+package at.jtalk.gui;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;

@@ -10,7 +10,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="400.0" prefWidth="500.0"
             style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1"
-            fx:controller="at.jtalk.chatWindow">
+            fx:controller="at.jtalk.gui.chatWindow">
     <children>
         <Pane prefHeight="549.0" prefWidth="112.0" style="-fx-background-color: #ffcc99;" />
         <TextField fx:id="groupNameField" alignment="CENTER" layoutX="119.0" layoutY="7.0" prefHeight="50.0" prefWidth="644.0" style="-fx-background-color: weiss;" text="Groupname">
