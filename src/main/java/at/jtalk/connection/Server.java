@@ -1,9 +1,7 @@
 package at.jtalk.connection;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -57,17 +55,45 @@ public class Server extends Send {
 
     }
     public void readMessage(String message){
-        System.out.println(message);
+
         String[] messagearray = message.split(":::::");
         if(messagearray[0].equals("sendall")){
             for(Socket socket : sockets){
              //   send(socket, message, chatWindowField);
             }
+        }else if(messagearray[0].equals("Sign In")){
+
+            signin(messagearray[1]);
         }
     }
 
-    public void signin(){
+    public void signin(String nachricht){
 
+        String[] inhalt = nachricht.split(":");
+        String user = inhalt[0];
+        String password = inhalt[1];
+        String ipaddress = inhalt[2];
+
+        try {
+
+            File users = new File("users.txt");
+            if (users.createNewFile()) {
+                System.out.println("Created new file of user names with name users.txt");
+            } else {
+                System.out.println("File already exists. Appending.");
+            }
+        } catch (IOException error) {
+            System.out.println("Bad luck. File could not be created.");
+            error.printStackTrace();
+        }
+        try {
+            FileWriter saveUserDetails = new FileWriter("users.txt", true);
+            saveUserDetails.write(user + ":" + password + ":" + ipaddress + "\n");
+            saveUserDetails.close();
+        } catch (IOException error) {
+            System.out.println("Bad luck. Data could not be written.");
+            error.printStackTrace();
+        }
     }
 }
 

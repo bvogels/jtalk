@@ -89,11 +89,21 @@ public class Login implements Initializable {
     @FXML
     public void signUp(javafx.event.ActionEvent actionEvent)throws IOException{
 
+
+        String serveripaddress = ServerIpField.getText();
+        int serverport = Integer.parseInt(ServerPort.getText());
+        String username = textFieldLogin.getText();
+        String password = passwordField.getText();
+        Client client = new Client(username, password);
+        client.connectServer(serveripaddress,serverport);
+        chatWindow.setClient(client);
+
         Stage stage = (Stage)signUpButton.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/userProfile.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
 
     }
 

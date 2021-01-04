@@ -1,5 +1,6 @@
 package at.jtalk.gui;
 
+import at.jtalk.connection.Client;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,6 +30,12 @@ public class userProfile implements Initializable{
     @FXML
     TextField ipAddressField;
 
+    private static Client chatclient;
+
+    public static void setClient(Client client) {
+        chatclient = client;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -44,33 +51,16 @@ public class userProfile implements Initializable{
     }
 
     public void saveUserProfile() throws IOException {
-        try {
-            File users = new File("users.txt");
-            if (users.createNewFile()) {
-                System.out.println("Created new file of user names with name users.txt");
-            } else {
-                System.out.println("File already exists. Appending.");
-            }
-        } catch (IOException error) {
-            System.out.println("Bad luck. File could not be created.");
-            error.printStackTrace();
-        }
+
         // When save button is clicked, the details are saved
 
         String user = signUpUser.getText();
         String password = signUpPassword.getText();
         String ipaddress = ipAddressField.getText();
-
-        try {
-            FileWriter saveUserDetails = new FileWriter("users.txt", true);
-            saveUserDetails.write(user + ":" + password + ":" + ipaddress + "\n");
-            saveUserDetails.close();
-        } catch (IOException error) {
-            System.out.println("Bad luck. Data could not be written.");
-            error.printStackTrace();
-        }
-
-        EventHandler<ActionEvent> saveProfile = event -> {}; // this is a lambda expression
+        String nachricht = "Sign In:::::"+user+":"+password+":"+ipaddress;
+        chatclient.send(chatclient.getSocket(),nachricht);
+        EventHandler<ActionEvent> saveProfile; // this is a lambda expression
+        saveProfile = event -> {};
 
         save.setOnAction(saveProfile); // the contents of the variables is stored into the file
         exitUserProfile(); // the window is closed

@@ -8,7 +8,7 @@ public class Messages {
 
     public Messages () {
         this.message = message;
-        this.timestamp = Date.getTime();
+        //this.timestamp = Date.getTime();
 
     }
 
