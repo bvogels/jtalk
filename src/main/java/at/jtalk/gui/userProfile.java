@@ -34,7 +34,7 @@ public class userProfile implements Initializable{
 
     }
 
-    public void exitUserProfile(ActionEvent actionEvent) throws IOException {
+    public void exitUserProfile() throws IOException {
 
         Stage stage = (Stage)exit.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/login.fxml"));
@@ -43,35 +43,37 @@ public class userProfile implements Initializable{
         stage.show();
     }
 
-    public void saveUserProfile(ActionEvent actionEvent) throws IOException {
-        // obtaining the user details
+    public void saveUserProfile() throws IOException {
+        try {
+            File users = new File("users.txt");
+            if (users.createNewFile()) {
+                System.out.println("Created new file of user names with name users.txt");
+            } else {
+                System.out.println("File already exists. Appending.");
+            }
+        } catch (IOException error) {
+            System.out.println("Bad luck. File could not be created.");
+            error.printStackTrace();
+        }
+        // When save button is clicked, the details are saved
+
         String user = signUpUser.getText();
         String password = signUpPassword.getText();
         String ipaddress = ipAddressField.getText();
 
-        // When save button is clicked, the details are saved
-        EventHandler<ActionEvent> saveProfile = event -> {
-            try {
-                File users = new File("users.txt");
-                if (users.createNewFile()) {
-                    System.out.println("Created new file of user names with name users.txt");
-                } else {
-                    System.out.println("File already exists. Appending.");
-                }
-            } catch (IOException error) {
-                System.out.println("Bad luck. File could not be created.");
-                error.printStackTrace();
-            }
+        try {
+            FileWriter saveUserDetails = new FileWriter("users.txt", true);
+            saveUserDetails.write(user + ":" + password + ":" + ipaddress + "\n");
+            saveUserDetails.close();
+        } catch (IOException error) {
+            System.out.println("Bad luck. Data could not be written.");
+            error.printStackTrace();
+        }
 
-            try {
-                FileWriter saveUserDetails = new FileWriter("users.txt");
-                saveUserDetails.write(user + password + ipaddress);
-                saveUserDetails.close();
-            } catch (IOException error) {
-                System.out.println("Could not save data.");
-            }
-        };
-        save.setOnAction(saveProfile);
+        EventHandler<ActionEvent> saveProfile = event -> {}; // this is a lambda expression
+
+        save.setOnAction(saveProfile); // the contents of the variables is stored into the file
+        exitUserProfile(); // the window is closed
     }
 }
 
