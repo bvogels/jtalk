@@ -10,7 +10,8 @@ import java.util.List;
 public class Server extends Send {
     private final int PORT;
     private Socket socket;
-    private static List<Socket> sockets = new ArrayList<>();
+    private static List<Socket> sockets = new ArrayList<>() {
+    };
 
     public Server(int PORT) {
         this.PORT = PORT;
@@ -29,7 +30,6 @@ public class Server extends Send {
 
         while(true) {
             try {
-
                 Socket socket = ServerSocket.accept();
                 System.out.println(socket);
                 this.socket = socket;
@@ -59,11 +59,13 @@ public class Server extends Send {
         String[] messagearray = message.split(":::::");
         if(messagearray[0].equals("sendall")){
             for(Socket socket : sockets){
-             //   send(socket, message, chatWindowField);
+                send(socket, message);
             }
         }else if(messagearray[0].equals("Sign In")){
-
             signin(messagearray[1]);
+        }else if (messagearray[0].equals("logon")){
+                //look in users.txt
+                send(socket, "LOGONALLOWED");
         }
     }
 

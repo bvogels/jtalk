@@ -50,7 +50,9 @@ public class Client extends Send {
     }
 
     public void readMessage(String message) {
-        outputfield.appendText(message);
+        //Controll if message is (Logon allowed or disallowed)
+        outputfield.appendText(message + "\n");
+
     }
 
 
