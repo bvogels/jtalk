@@ -32,10 +32,10 @@
         <Button fx:id="loginButton" layoutX="384.0" layoutY="556.0" mnemonicParsing="false" onAction="#loginAccept" text="Login" wrapText="true" />
         <Button fx:id="signUpButton" layoutX="677.0" layoutY="75.0" mnemonicParsing="false" onAction="#signUp" prefHeight="25.0" prefWidth="78.0" text="Sign up" />
         <Label layoutX="664.0" layoutY="42.0" text="New? Sign up here!" />
-        <CheckBox id="runAsServer" layoutX="695.0" layoutY="603.0" mnemonicParsing="false" onAction="#checkBox" text="Run as server" textFill="#f8f8f8" />
-      <TextField layoutX="35.0" layoutY="620.0" promptText="ServerIP" text="localhost" />
-      <TextField layoutX="203.0" layoutY="620.0" prefHeight="25.0" prefWidth="54.0" promptText="Port" text="4876" />
-      <Label layoutX="301.0" layoutY="520.0" text="Cannot connect to server" textFill="RED">
+        <CheckBox fx:id="runAsServer" layoutX="695.0" layoutY="603.0" mnemonicParsing="false" onAction="#checkBox" text="Run as server" textFill="#f8f8f8" />
+      <TextField fx:id="ServerIpField" layoutX="35.0" layoutY="620.0" promptText="ServerIP" text="localhost" />
+      <TextField fx:id="ServerPort" layoutX="203.0" layoutY="620.0" prefHeight="25.0" prefWidth="54.0" promptText="Port" text="4876" />
+      <Label fx:id= "labelConnection" layoutX="301.0" layoutY="520.0" text="Cannot connect to server" textFill="RED">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
