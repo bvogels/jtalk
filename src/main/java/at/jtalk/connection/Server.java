@@ -6,28 +6,46 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Server extends Listen {
+public class Server extends Send {
     private final int PORT;
-    private static List<Socket> sockets;
+    private Socket socket;
+    private static List<Socket> sockets = new ArrayList<>();
 
     public Server(int PORT) {
         this.PORT = PORT;
     }
 
-    public void addSocketToList(Socket s){
-        sockets.add(s);
+    public Socket getSocket(){
+        return socket;
+    }
+    public static void deletesocket(Socket s){
+        sockets.remove(s);
     }
 
     public void listen() {
         try {
             ServerSocket ServerSocket = new ServerSocket(PORT);
-            Socket s = ServerSocket.accept();
-            sockets.add(s);
-            checkusernamepassword(s);
 
-        } catch (IOException e) {
+        while(true) {
+            try {
+
+                Socket socket = ServerSocket.accept();
+                System.out.println(socket);
+                this.socket = socket;
+                sockets.add(socket);
+                Thread t = new Listen(this);
+                t.start();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -36,10 +54,18 @@ public class Server extends Listen {
         BufferedReader bfreader = new BufferedReader(isreader);
         System.out.println(bfreader.readLine());
 
-    }
-    public void send(){
 
     }
+    public void readMessage(String message){
+        System.out.println(message);
+        String[] messagearray = message.split(":::::");
+        if(messagearray[0].equals("sendall")){
+            for(Socket socket : sockets){
+             //   send(socket, message, chatWindowField);
+            }
+        }
+    }
+
     public void signin(){
 
     }

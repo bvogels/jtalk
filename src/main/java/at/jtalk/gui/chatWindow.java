@@ -10,7 +10,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class chatWindow{
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class chatWindow implements Initializable{
 
     @FXML
     private TextField messageField;
@@ -25,12 +28,21 @@ public class chatWindow{
     @FXML
     private javafx.scene.shape.Circle connectionCircle;
 
-    private Client client;
+    private static Client chatclient;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        chatclient.setOutputfield(chatWindowField);
+    }
+
+    public static void setClient(Client client) {
+        chatclient = client;
+    }
 
 
     public void sendText(ActionEvent actionEvent) {
-
-       // client.send();
+        String messagetosend = "sendall:::::" + messageField.getText();
+       chatclient.send(chatclient.getSocket(), messagetosend);
 
     /*
         String message = "user: ";
@@ -41,7 +53,4 @@ public class chatWindow{
 
     }
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
 }

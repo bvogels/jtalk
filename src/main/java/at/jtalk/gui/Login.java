@@ -64,16 +64,11 @@ public class Login implements Initializable {
             int serverport = Integer.parseInt(ServerPort.getText());
             String username = textFieldLogin.getText();
             String password = passwordField.getText();
-            //Socket s = Client.connectServer(serveripaddress, serverport);
-            //Client client = new Client(s);
-            //chatWindow CW = new chatWindow();
-            //CW.setClient(client);
-            //client.Logon(textFieldLogin.getText(), passwordField.getText());
             Client client = new Client(username, password);
             client.connectServer(serveripaddress,serverport);
-            chatWindow CW = new chatWindow();
-            CW.setClient(client);
+            chatWindow.setClient(client);
             client.Logon();
+
             //GUI
             Stage stage = (Stage)loginButton.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
