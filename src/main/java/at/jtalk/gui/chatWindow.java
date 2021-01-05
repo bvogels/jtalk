@@ -40,9 +40,9 @@ public class chatWindow implements Initializable{
     }
 
 
-    public void sendText(ActionEvent actionEvent) {
-        String messagetosend = "sendall:::::" + messageField.getText();
-       chatclient.send(chatclient.getSocket(), messagetosend);
+    public void sendText() {
+        String messageToSend = "sendall:::::" + messageField.getText();
+        chatclient.send(chatclient.getSocket(), messageToSend);
 
     /*
         String message = "user: ";

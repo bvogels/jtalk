@@ -60,12 +60,12 @@ public class Login implements Initializable {
 
         if(!runAsServer.isSelected()){
             //Connection
-            String serveripaddress = ServerIpField.getText();
-            int serverport = Integer.parseInt(ServerPort.getText());
+            String serverIpAddress = ServerIpField.getText();
+            int serverPort = Integer.parseInt(ServerPort.getText());
             String username = textFieldLogin.getText();
             String password = passwordField.getText();
             Client client = new Client(username, password);
-            client.connectServer(serveripaddress,serverport);
+            client.connectServer(serverIpAddress,serverPort);
             chatWindow.setClient(client);
             client.Logon();
 
