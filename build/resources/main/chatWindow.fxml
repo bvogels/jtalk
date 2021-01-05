@@ -17,7 +17,7 @@
               <Label fx:id="connectionLabel" layoutX="27.0" layoutY="21.0" text="disconnected" textFill="RED" />
               <Circle fx:id="connectionCircle" fill="RED" layoutX="14.0" layoutY="29.0" radius="7.0" smooth="false" stroke="BLACK" strokeType="INSIDE" />
          </children></Pane>
-        <TextField fx:id="groupNameField" alignment="CENTER" layoutX="119.0" layoutY="7.0" prefHeight="50.0" prefWidth="644.0" style="-fx-background-color: weiss;" text="Groupname">
+        <TextField fx:id="groupNameField" disable="true" alignment="CENTER" layoutX="119.0" layoutY="7.0" prefHeight="50.0" prefWidth="644.0" style="-fx-background-color: white;" text="J-Talk">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
@@ -25,7 +25,7 @@
         <Line endX="543.0" layoutX="213.0" layoutY="49.0" startX="-100.0" stroke="#ffcc99" />
         <Pane layoutX="113.0" layoutY="488.0" prefHeight="61.0" prefWidth="644.0">
             <children>
-                <TextField fx:id="messageField" layoutX="130.0" layoutY="9.0" prefHeight="44.0" prefWidth="385.0" promptText="Type message..." />
+                <TextField fx:id="messageField" layoutX="130.0" layoutY="9.0" prefHeight="44.0" prefWidth="385.0" promptText="Type message..." onAction="#sendText" />
                 <Button fx:id="sendButton" layoutX="522.0" layoutY="19.0" minWidth="50.0" mnemonicParsing="false" onAction="#sendText" prefHeight="26.0" prefWidth="50.0" style="-fx-background-color: grey;" text="Send" textFill="#ffcc99" />
             </children>
         </Pane>

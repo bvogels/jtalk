@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class Send {
-    public final void send(Socket socket, String message) {
+    public static final void send(Socket socket, String message) {
         try {
             OutputStreamWriter oswriter = new OutputStreamWriter(socket.getOutputStream());
             PrintWriter pwriter = new PrintWriter(oswriter);

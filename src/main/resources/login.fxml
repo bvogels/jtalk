@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jtalk.gui.Login">
+<AnchorPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jtalk.gui.LoginWindow">
     <cursor>
         <Cursor fx:constant="DEFAULT" />
     </cursor>
@@ -21,7 +21,7 @@
                 <Image url="@loginPicture.png" />
             </image>
         </ImageView>
-        <TextField fx:id="textFieldLogin" layoutX="335.0" layoutY="427.0" promptText="Username" />
+        <TextField fx:id="usernameportfield" layoutX="335.0" layoutY="427.0" promptText="Username" />
         <Label fx:id="userLabel" layoutX="265.0" layoutY="431.0" text="Username" textFill="#d3ae34" />
         <Label fx:id="passwordLabel" layoutX="265.0" layoutY="491.0" text="Password" textFill="#d3ae34" />
         <PasswordField fx:id="passwordField" layoutX="335.0" layoutY="487.0" promptText="Password">

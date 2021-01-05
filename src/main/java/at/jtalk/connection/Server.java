@@ -1,75 +1,57 @@
 package at.jtalk.connection;
 
 
+import at.jtalk.gui.LoginWindow;
+import javafx.application.Platform;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Server extends Send {
+public class Server implements Runnable{
     private final int PORT;
-    private Socket socket;
-    private static List<Socket> sockets = new ArrayList<>() {
-    };
+    private static final List<Connection> connections = new ArrayList<>();
+    private static Label connectionlabel;
 
     public Server(int PORT) {
         this.PORT = PORT;
     }
 
-    public Socket getSocket(){
-        return socket;
-    }
-    public static void deletesocket(Socket s){
-        sockets.remove(s);
+    public static void deleteconnection(Connection c) {
+        connections.remove(c);
     }
 
-    public void listen() {
-        try {
-            ServerSocket ServerSocket = new ServerSocket(PORT);
+    public static void addconnection(Connection c) {
+        connections.add(c);
+    }
 
-        while(true) {
-            try {
-                Socket socket = ServerSocket.accept();
-                System.out.println(socket);
-                this.socket = socket;
-                sockets.add(socket);
-                Thread t = new Listen(this);
-                t.start();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                break;
-            }
-        }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void setConnectionlabel(Label connectionlabel){
+        Server.connectionlabel = connectionlabel;
     }
     public void checkusernamepassword(Socket s) throws IOException {
-        InputStreamReader isreader = new InputStreamReader(s.getInputStream());
-        BufferedReader bfreader = new BufferedReader(isreader);
-        System.out.println(bfreader.readLine());
-
 
     }
-    public void readMessage(String message){
+
+    public static void readMessage(String message) {
 
         String[] messagearray = message.split(":::::");
-        if(messagearray[0].equals("sendall")){
-            for(Socket socket : sockets){
-                send(socket, message);
+        if (messagearray[0].equals("sendall")) {
+            for (Connection c : connections) {
+                Send.send(c.getSocket(), messagearray[1]);
             }
-        }else if(messagearray[0].equals("Sign In")){
+        } else if (messagearray[0].equals("Sign In")) {
             signin(messagearray[1]);
-        }else if (messagearray[0].equals("logon")){
-                //look in users.txt
-                send(socket, "LOGONALLOWED");
+        } else if (messagearray[0].equals("login")) {
+            //look in users.txt
+
         }
     }
 
-    public void signin(String nachricht){
+    public static void signin(String nachricht) {
 
         String[] inhalt = nachricht.split(":");
         String user = inhalt[0];
@@ -97,8 +79,35 @@ public class Server extends Send {
             error.printStackTrace();
         }
     }
-}
 
-//    InputStreamReader isreader = new InputStreamReader(s.getInputStream());
-//    BufferedReader bfreader = new BufferedReader(isreader);
-//            System.out.println(bfreader.readLine());
+    @Override
+    public void run() {
+        try {
+            ServerSocket ServerSocket = new ServerSocket(PORT);
+
+            while (true) {
+                try {
+                    Socket socket = ServerSocket.accept();
+                    Thread t = new Connection(socket, "Server");
+                    t.start();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            connectionlabel.setText("shit");
+                            connectionlabel.setVisible(true);
+                            connectionlabel.setText("Hallo");
+                        }
+                    });
+
+
+                } catch (Exception e) {
+                    System.out.println(e);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            connectionlabel.setVisible(true);
+        }
+    }
+}
