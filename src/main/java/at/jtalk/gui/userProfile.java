@@ -11,8 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -57,8 +55,8 @@ public class userProfile implements Initializable{
         String user = signUpUser.getText();
         String password = signUpPassword.getText();
         String ipaddress = ipAddressField.getText();
-        String nachricht = "Sign In:::::"+user+":"+password+":"+ipaddress;
-        chatclient.send(chatclient.getSocket(),nachricht);
+        String message = "Sign In:::::"+user+":"+password+":"+ipaddress;
+        chatclient.send(chatclient.getSocket(),message);
         EventHandler<ActionEvent> saveProfile; // this is a lambda expression
         saveProfile = event -> {};
 
