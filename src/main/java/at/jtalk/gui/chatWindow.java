@@ -3,11 +3,9 @@ package at.jtalk.gui;
 import at.jtalk.connection.Client;
 import at.jtalk.connection.Send;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -40,12 +38,12 @@ public class chatWindow implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Client.setoutputfield(chatWindowField);
-        setconnectionGUI();
+        Client.setOutputField(chatWindowField);
+        setConnectionGui();
 
     }
 
-    public void setconnectionGUI(){
+    public void setConnectionGui(){
         if(connected){
             connectionLabel.setText("Connected");
             connectionLabel.setTextFill(Color.GREEN);

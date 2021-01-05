@@ -12,7 +12,7 @@ public class Connection extends Thread {
     public Connection(Socket socket, String clientorserver) {
         this.clientorserver = clientorserver;
         this.socket = socket;
-        Server.addconnection(this);
+        Server.addConnection(this);
 
     }
 
@@ -37,7 +37,7 @@ public class Connection extends Thread {
 
             }
             catch (IOException e) {
-                Server.deleteconnection(this);
+                Server.deleteConnection(this);
                 break;
             }
         }

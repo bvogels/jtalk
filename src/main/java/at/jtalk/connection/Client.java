@@ -19,7 +19,7 @@ public class Client extends Send {
 
     }
 
-    public static void setoutputfield(TextArea chatWindowField) {
+    public static void setOutputField(TextArea chatWindowField) {
         outputfield = chatWindowField;
     }
 

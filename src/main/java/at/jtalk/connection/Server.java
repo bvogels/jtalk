@@ -1,10 +1,8 @@
 package at.jtalk.connection;
 
 
-import at.jtalk.gui.LoginWindow;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -13,19 +11,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server implements Runnable{
-    private final int PORT;
+    private final int port;
     private static final List<Connection> connections = new ArrayList<>();
     private static Label connectionlabel;
 
     public Server(int PORT) {
-        this.PORT = PORT;
+        this.port = PORT;
     }
 
-    public static void deleteconnection(Connection c) {
+    public static void deleteConnection(Connection c) {
         connections.remove(c);
     }
 
-    public static void addconnection(Connection c) {
+    public static void addConnection(Connection c) {
         connections.add(c);
     }
 
@@ -44,14 +42,14 @@ public class Server implements Runnable{
                 Send.send(c.getSocket(), messagearray[1]);
             }
         } else if (messagearray[0].equals("Sign In")) {
-            signin(messagearray[1]);
+            signIn(messagearray[1]);
         } else if (messagearray[0].equals("login")) {
             //look in users.txt
 
         }
     }
 
-    public static void signin(String nachricht) {
+    public static void signIn(String nachricht) {
 
         String[] inhalt = nachricht.split(":");
         String user = inhalt[0];
@@ -83,7 +81,7 @@ public class Server implements Runnable{
     @Override
     public void run() {
         try {
-            ServerSocket ServerSocket = new ServerSocket(PORT);
+            ServerSocket ServerSocket = new ServerSocket(port);
 
             while (true) {
                 try {

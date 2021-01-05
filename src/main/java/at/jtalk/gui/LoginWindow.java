@@ -53,8 +53,8 @@ public class LoginWindow implements Initializable {
         try {
             if (!runAsServer.isSelected()) {
                 //Connection
-                if (checkiffilled()) {
-                    Client client = connecttoserver();
+                if (checkIfFilled()) {
+                    Client client = connectToServer();
                     client.Login();
 
                     //GUI
@@ -65,7 +65,7 @@ public class LoginWindow implements Initializable {
                     stage.show();
                 }
             } else {
-                if (checkiffilled()) {
+                if (checkIfFilled()) {
 
                     int port = Integer.parseInt(usernameportfield.getText());
                     Thread startserver = new Thread(new Server(port));
@@ -83,8 +83,8 @@ public class LoginWindow implements Initializable {
     }
     @FXML
     public void signUp(javafx.event.ActionEvent actionEvent)throws IOException{
-        if(checkiffilled()) {
-            connecttoserver();
+        if(checkIfFilled()) {
+            connectToServer();
             chatWindow.setConnected();
 
             Stage stage = (Stage) signUpButton.getScene().getWindow();
@@ -121,7 +121,7 @@ public class LoginWindow implements Initializable {
 
     }
 
-    public Client connecttoserver(){
+    public Client connectToServer(){
             String serveripaddress = ServerIpField.getText();
             int serverport = Integer.parseInt(ServerPort.getText());
             String username = usernameportfield.getText();
@@ -133,13 +133,13 @@ public class LoginWindow implements Initializable {
             return client;
 
     }
-    public boolean checkiffilled(){
+    public boolean checkIfFilled(){
         if((ServerIpField.getText().isEmpty() || ServerPort.getText().isEmpty() || usernameportfield.getText().isEmpty() || passwordField.getText().isEmpty()) && !runAsServer.isSelected()){
-            setlabelconnection("Bitte alle Felder ausfuellen");
+            setLabelConnection("Bitte alle Felder ausfuellen");
             return false;
 
         }else if(usernameportfield.getText().isEmpty() && runAsServer.isSelected()) {
-            setlabelconnection("Bitte Port ausfuellen");
+            setLabelConnection("Bitte Port ausfuellen");
             return false;
         }
         else
@@ -148,7 +148,7 @@ public class LoginWindow implements Initializable {
         }
     }
 
-    public void setlabelconnection(String text){
+    public void setLabelConnection(String text){
         labelConnection.setVisible(true);
         labelConnection.setText(text);
     }
