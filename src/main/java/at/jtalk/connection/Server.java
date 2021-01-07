@@ -55,7 +55,7 @@ attempts to log in, and a method to verify his or her credentials is run.
 
  */
 
-    public static void readMessage(String message) {
+    public static void readMessage(String message, Socket SOCKET) {
 
         String[] messageArray = message.split(":::::");
         switch (messageArray[0]) {
@@ -69,21 +69,26 @@ attempts to log in, and a method to verify his or her credentials is run.
 //                    signIn(messagearray[1]);
                 break;
             case "login":
-                //look in users.txt
+                if (checkIfUserExists(messageArray[1])) {
+                    Send.send(SOCKET, "loginsuccessful");
+                } else {
+                    Send.send(SOCKET, "loginfailed");
+                };
 
                 break;
         }
     }
-/*
-    public static boolean checkIfUserExists(String username) {
-        String[] details = username.split(":");
+
+    public static boolean checkIfUserExists(String credentials) {
+        String[] details = credentials.split(":");
         String user = details[0];
         String password = details[1];
         try {
-            Scanner userdata = new Scanner(new FileInputStream("users.txt"));
+            Scanner userdata = new Scanner(new File("users.txt"));
             while (userdata.hasNextLine()) {
                 String line = userdata.nextLine();
-                if (line.contains(user) && line.contains(password)) {
+                String[] singleDetail = line.split(":");
+                if (singleDetail[0].contains(user) && singleDetail[1].contains(password)) {
                     return true;
                 }
             }
@@ -92,7 +97,7 @@ attempts to log in, and a method to verify his or her credentials is run.
         }
         return false;
     }
-*/
+
 
 
 /* The signIn method lets a new user subscribe to JTalk. It evaluates only the second field of the string
@@ -145,7 +150,7 @@ a Connection object with a socket is passed to it, if it is a Server.
                     Socket socket = ServerSocket.accept();
                     Thread t = new Connection(socket, "Server");
                     t.start();
-                    Platform.runLater(new Runnable() {
+/*                    Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             connectionlabel.setText("shit");
@@ -153,7 +158,7 @@ a Connection object with a socket is passed to it, if it is a Server.
                             connectionlabel.setText("Hallo");
                         }
                     });
-
+*/
 
                 } catch (Exception e) {
                     System.out.println(e);

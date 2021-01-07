@@ -40,14 +40,14 @@ public class LoginWindow implements Initializable {
     @FXML
     private Label labelConnection;
 
-
+    public static boolean loginAllowed; //
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         labelConnection.setVisible(false);
     }
 
-/* This is the method to build the login mechanics. If the username and passwort fields are filled, the client
+/* This is the method to build the login mechanics. If the username and password fields are filled, the client
 is allowed to connect to the server (via method connectToServer()). This is only executed if the checkbox
 runAsServer is not clicked. However, if it is clicked, the else block is executed and the server is started upon
 pressing the start button (don't forget to do this.)
@@ -62,13 +62,17 @@ pressing the start button (don't forget to do this.)
                 if (checkIfFilled()) {
                     Client client = connectToServer();
                     client.Login();
+                    if (loginAllowed) {
 
-                    //GUI
-                    Stage stage = (Stage) loginButton.getScene().getWindow();
-                    Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
-                    Scene scene = new Scene(root);
-                    stage.setScene(scene);
-                    stage.show();
+                        //GUI
+                        Stage stage = (Stage) loginButton.getScene().getWindow();
+                        Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                    } else {
+                        setLabelConnection("Wrong credentials.");
+                    }
                 }
             } else {
                 if (checkIfFilled()) {

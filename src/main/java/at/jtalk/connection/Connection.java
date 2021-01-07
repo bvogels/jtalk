@@ -27,6 +27,10 @@ public class Connection extends Thread {
         return SOCKET;
     }
 
+/* In this method the server or the client read the incoming messages.
+
+ */
+
     @Override
     public void run() {
         while(true)
@@ -36,7 +40,7 @@ public class Connection extends Thread {
                 BufferedReader bf = new BufferedReader(istreamreader);
                 String get = bf.readLine();
                 if(CLIENTORSERVER.equals("Server")){
-                    Server.readMessage(get);
+                    Server.readMessage(get, SOCKET);
                 }
                 else if (CLIENTORSERVER.equals("Client")) {
                     Client.readMessage(get);

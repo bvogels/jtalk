@@ -1,5 +1,6 @@
 package at.jtalk.connection;
 
+import at.jtalk.gui.LoginWindow;
 import javafx.scene.control.TextArea;
 
 import java.io.IOException;
@@ -54,10 +55,14 @@ public class Client extends Send {
     }
 
     public static void readMessage(String message) {
-        //Controll if message is (Logon allowed or disallowed)
-        String[] messagearray = message.split("<:::>");
-        outputfield.appendText(messagearray[0] + ":" + "\n");
-        outputfield.appendText(messagearray[1] +"\n\n");
+        if (message.equals("loginsuccessful")) {
+            LoginWindow.loginAllowed = true;
+        } else {
+            //Controll if message is (Logon allowed or disallowed)
+            String[] messagearray = message.split("<:::>");
+            outputfield.appendText(messagearray[0] + ":" + "\n");
+            outputfield.appendText(messagearray[1] + "\n\n");
+        }
 
     }
 
