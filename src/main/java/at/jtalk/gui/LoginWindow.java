@@ -91,8 +91,8 @@ pressing the start button (don't forget to do this.)
         }
 
 /* If a new user wants to sign up for an account, the username/password fields must not be filled. Therefore, the
-if statement is reversed so the appropriate FXML code can be executed.
- */
+*if statement is reversed so the appropriate FXML code can be executed.
+*/
 
     @FXML
     public void signUp() throws IOException{
@@ -133,9 +133,8 @@ if statement is reversed so the appropriate FXML code can be executed.
     }
 
 /* A client object is returned with the user details username, password, ip address and port number. This method
-is called by the loginAccept method. The client object itself has the username and the password as parameters.
-
- */
+*is called by the loginAccept method. The client object itself has the username and the password as parameters.
+*/
 
     public Client connectToServer(){
             String serverIpAddress = ServerIpField.getText();
@@ -150,8 +149,8 @@ is called by the loginAccept method. The client object itself has the username a
     }
 
 /* The status of the text fields is evaluated. The fields have to be filled for all possibilities except
-if a new user requests credentials via sign up.
- */
+*   if a new user requests credentials via sign up.
+*/
 
 
     public boolean checkIfFilled(){

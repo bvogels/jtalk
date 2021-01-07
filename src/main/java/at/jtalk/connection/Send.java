@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-
+/*Method for sending messages on socket and gets written to the output stream and printed out on gui*/
 public class Send {
     public static final void send(Socket socket, String message) {
         try {

@@ -19,11 +19,11 @@ public class Client extends Send {
         this.password = password;
 
     }
-
+    //assigning chat window textfield to "outputfield" -> static variable
     public static void setOutputField(TextArea chatWindowField) {
         outputfield = chatWindowField;
     }
-
+    //getter Method for Socket
     public Socket getSocket(){
         return socket;
     }
@@ -33,6 +33,10 @@ public class Client extends Send {
         this.outputfield = outputfield;
     }
 */
+
+    /*This method creates a thread which establishes the connection between server and client in the background.
+     *It sets the Parameter "clientorserver" as "client"
+     */
     public void connectServer(String ipaddress, int port) {
         try {
             socket = new Socket(ipaddress, port);
@@ -45,7 +49,9 @@ public class Client extends Send {
         }
     }
 
+    /*stores the login string with username and password and sends it to the server*/
     public void login() throws IOException {
+
             OutputStreamWriter oswriter = new OutputStreamWriter(socket.getOutputStream());
             PrintWriter pwriter = new PrintWriter(oswriter);
             pwriter.println("login:::::" + username + ":"  + password);
@@ -53,12 +59,16 @@ public class Client extends Send {
 
         //return 1;
     }
+    /*if the username and the password is valid the variable "message" will contain the string "loginsuccessful"
+     which allows the access to the chat area
+     else it splits the message and appends the first part to messagearray[0] which represents the username
+     and messagearray[1] which represents the message*/
 
     public static void readMessage(String message) {
         if (message.equals("loginsuccessful")) {
             LoginWindow.loginAllowed = true;
         } else {
-            //Controll if message is (Logon allowed or disallowed)
+            //Control if message is (Logon allowed or disallowed)
             String[] messagearray = message.split("<:::>");
             outputfield.appendText(messagearray[0] + ":" + "\n");
             outputfield.appendText(messagearray[1] + "\n\n");

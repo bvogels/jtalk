@@ -39,7 +39,7 @@ public class userProfile implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
 
     }
-
+    //Changes window from Sign up to login window
     public void exitUserProfile() throws IOException {
 
         Stage stage = (Stage)exit.getScene().getWindow();
@@ -49,6 +49,8 @@ public class userProfile implements Initializable{
         stage.show();
     }
 
+    /*Method saves username, password and ipaddress and concatenates them in a new string where the variables are separated by ":". Furthermore,
+    * the input of the string "message" will be written to a file*/
     public void saveUserProfile() throws IOException {
 
         // When save button is clicked, the details are saved

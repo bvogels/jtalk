@@ -43,6 +43,7 @@ public class chatWindow implements Initializable{
 
     }
 
+    /*changes the colour of circle in chat window to green and sets the label to "connected" when connected to server*/
     public void setConnectionGui(){
         if(connected){
             connectionLabel.setText("Connected");
@@ -56,7 +57,7 @@ public class chatWindow implements Initializable{
         chatclient = client;
     }
 
-
+    //Method for sending message to server which will show up on the chat area, afterwards it clears the message field
     public void sendText(ActionEvent actionEvent) {
        String messagetosend = "sendall:::::" +chatclient.getUsername() + "<:::>" + messageField.getText();
        Send.send(chatclient.getSocket(), messagetosend);
