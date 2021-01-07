@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import javafx.scene.paint.Color;
 
 /* The implemented class Runnable enables multithreading.
 The variables of the class declaration are used as follows:
@@ -145,20 +146,20 @@ a Connection object with a socket is passed to it, if it is a Server.
     public void run() {
         try {
             ServerSocket ServerSocket = new ServerSocket(PORT);
-
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    connectionlabel.setVisible(true);
+                    connectionlabel.setText("Server started");
+                    connectionlabel.setTextFill(Color.GREEN);
+                }
+            });
             while (true) {
                 try {
                     Socket socket = ServerSocket.accept();
                     Thread t = new Connection(socket, "Server");
                     t.start();
-/*                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            connectionlabel.setText("shit");
-                            connectionlabel.setVisible(true);
-                            connectionlabel.setText("Hallo");
-                        }
-                    });
+/*
 */
 
                 } catch (Exception e) {
@@ -167,8 +168,14 @@ a Connection object with a socket is passed to it, if it is a Server.
                 }
             }
         } catch (Exception e) {
-            System.out.println(e);
-            connectionlabel.setVisible(true);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    connectionlabel.setVisible(true);
+                    connectionlabel.setText("Server can't start");
+                    connectionlabel.setTextFill(Color.RED);
+                }
+            });
         }
     }
 }
