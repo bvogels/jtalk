@@ -55,7 +55,7 @@ attempts to log in, and a method to verify his or her credentials is run.
 
  */
 
-    public static void readMessage(String message, Socket SOCKET) {
+    public static void readMessage(String message, Connection connection) {
 
         String[] messageArray = message.split(":::::");
         switch (messageArray[0]) {
@@ -70,9 +70,10 @@ attempts to log in, and a method to verify his or her credentials is run.
                 break;
             case "login":
                 if (checkIfUserExists(messageArray[1])) {
-                    Send.send(SOCKET, "loginsuccessful");
+                    Send.send(connection.getSOCKET(), "loginsuccessful");
                 } else {
-                    Send.send(SOCKET, "loginfailed");
+                    Send.send(connection.getSOCKET(), "loginfailed");
+                    Server.deleteConnection(connection);
                 };
 
                 break;

@@ -3,7 +3,6 @@ package at.jtalk.gui;
 import at.jtalk.connection.Client;
 import at.jtalk.connection.Server;
 import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -16,6 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 public class LoginWindow implements Initializable {
 
@@ -61,10 +61,12 @@ pressing the start button (don't forget to do this.)
                 //Connection
                 if (checkIfFilled()) {
                     Client client = connectToServer();
-                    client.Login();
+                    client.login();
+                    TimeUnit.SECONDS.sleep(3);
                     if (loginAllowed) {
 
                         //GUI
+                        chatWindow.setConnected();
                         Stage stage = (Stage) loginButton.getScene().getWindow();
                         Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
                         Scene scene = new Scene(root);
@@ -83,7 +85,7 @@ pressing the start button (don't forget to do this.)
                     startserver.start();
                 }
             }
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
             }
         }
 

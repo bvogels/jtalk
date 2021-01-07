@@ -45,7 +45,7 @@ public class Client extends Send {
         }
     }
 
-    public void Login() throws IOException {
+    public void login() throws IOException {
             OutputStreamWriter oswriter = new OutputStreamWriter(socket.getOutputStream());
             PrintWriter pwriter = new PrintWriter(oswriter);
             pwriter.println("login:::::" + username + ":"  + password);

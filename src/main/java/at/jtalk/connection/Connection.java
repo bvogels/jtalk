@@ -40,7 +40,7 @@ public class Connection extends Thread {
                 BufferedReader bf = new BufferedReader(istreamreader);
                 String get = bf.readLine();
                 if(CLIENTORSERVER.equals("Server")){
-                    Server.readMessage(get, SOCKET);
+                    Server.readMessage(get, this);
                 }
                 else if (CLIENTORSERVER.equals("Client")) {
                     Client.readMessage(get);
