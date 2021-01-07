@@ -66,7 +66,3 @@ public class Client extends Send {
         return username;
     }
 }
-//            OutputStreamWriter oswriter = new OutputStreamWriter(s.getOutputStream());
-//            PrintWriter pwriter = new PrintWriter(oswriter);
-//            pwriter.println("Guten Tach!");
-//            pwriter.flush();

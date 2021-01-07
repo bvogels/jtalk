@@ -1,6 +1,7 @@
 package at.jtalk.gui;
 
 import at.jtalk.connection.Client;
+import at.jtalk.connection.Send;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -56,9 +57,10 @@ public class userProfile implements Initializable{
         String password = signUpPassword.getText();
         String ipaddress = ipAddressField.getText();
         String message = "Sign In:::::"+user+":"+password+":"+ipaddress;
-        chatclient.send(chatclient.getSocket(),message);
+
         EventHandler<ActionEvent> saveProfile; // this is a lambda expression
         saveProfile = event -> {};
+        Send.send(chatclient.getSocket(),message);
 
         save.setOnAction(saveProfile); // the contents of the variables is stored into the file
         exitUserProfile(); // the window is closed

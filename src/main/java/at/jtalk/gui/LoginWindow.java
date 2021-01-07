@@ -47,8 +47,14 @@ public class LoginWindow implements Initializable {
         labelConnection.setVisible(false);
     }
 
+/* This is the method to build the login mechanics. If the username and passwort fields are filled, the client
+is allowed to connect to the server (via method connectToServer()). This is only executed if the checkbox
+runAsServer is not clicked. However, if it is clicked, the else block is executed and the server is started upon
+pressing the start button (don't forget to do this.)
+ */
+
     @FXML
-    public void loginAccept(javafx.event.ActionEvent actionEvent) {
+    public void loginAccept() {
 
         try {
             if (!runAsServer.isSelected()) {
@@ -69,21 +75,21 @@ public class LoginWindow implements Initializable {
 
                     int port = Integer.parseInt(usernameportfield.getText());
                     Thread startserver = new Thread(new Server(port));
-                    Server.setConnectionlabel(labelConnection);
+                    Server.setConnectionLabel(labelConnection);
                     startserver.start();
                 }
             }
-        }catch(IOException ignored){
-
+        } catch (IOException ignored) {
+            }
         }
 
+/* If a new user wants to sign up for an account, the username/password fields must not be filled. Therefore, the
+if statement is reversed so the appropriate FXML code can be executed.
+ */
 
-
-
-    }
     @FXML
-    public void signUp(javafx.event.ActionEvent actionEvent)throws IOException{
-        if(checkIfFilled()) {
+    public void signUp() throws IOException{
+        if(!checkIfFilled()) {
             connectToServer();
             chatWindow.setConnected();
 
@@ -93,12 +99,12 @@ public class LoginWindow implements Initializable {
             stage.setScene(scene);
             stage.show();
         }
-
-
     }
 
+/* Just a couple of text fields. It is checked at the beginning if the checkbox runAsServer has been checked. */
+
     @FXML
-    public void checkBox(ActionEvent actionEvent) {
+    public void checkBox() {
         if(runAsServer.isSelected()){
             userLabel.setText("Port");
             passwordField.setVisible(false);
@@ -117,22 +123,30 @@ public class LoginWindow implements Initializable {
             usernameportfield.setPromptText("Username");
             labelConnection.setVisible(false);
         }
-
-
     }
 
+/* A client object is returned with the user details username, password, ip address and port number. This method
+is called by the loginAccept method. The client object itself has the username and the password as parameters.
+
+ */
+
     public Client connectToServer(){
-            String serveripaddress = ServerIpField.getText();
-            int serverport = Integer.parseInt(ServerPort.getText());
+            String serverIpAddress = ServerIpField.getText();
+            int serverPort = Integer.parseInt(ServerPort.getText());
             String username = usernameportfield.getText();
             String password = passwordField.getText();
             Client client = new Client(username, password);
-            client.connectServer(serveripaddress, serverport);
+            client.connectServer(serverIpAddress, serverPort);
             chatWindow.setClient(client);
 
             return client;
-
     }
+
+/* The status of the text fields is evaluated. The fields have to be filled for all possibilities except
+if a new user requests credentials via sign up.
+ */
+
+
     public boolean checkIfFilled(){
         if((ServerIpField.getText().isEmpty() || ServerPort.getText().isEmpty() || usernameportfield.getText().isEmpty() || passwordField.getText().isEmpty()) && !runAsServer.isSelected()){
             setLabelConnection("Bitte alle Felder ausfuellen");
