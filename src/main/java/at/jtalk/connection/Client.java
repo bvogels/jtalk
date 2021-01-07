@@ -1,6 +1,6 @@
 package at.jtalk.connection;
 
-import at.jtalk.gui.chatWindow;
+import at.jtalk.gui.LoginWindow;
 import javafx.scene.control.TextArea;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ public class Client extends Send {
     private String username;
     private String password;
     private Socket socket;
-    private TextArea outputfield;
+    private static TextArea outputfield;
 
     public Client(String username, String password) {
         this.username = username;
@@ -20,19 +20,24 @@ public class Client extends Send {
 
     }
 
+    public static void setOutputField(TextArea chatWindowField) {
+        outputfield = chatWindowField;
+    }
+
     public Socket getSocket(){
         return socket;
     }
 
-    public void setOutputfield(TextArea outputfield){
+    /*
+    public static void setOutputfield(TextArea outputfield){
         this.outputfield = outputfield;
     }
-
+*/
     public void connectServer(String ipaddress, int port) {
         try {
             socket = new Socket(ipaddress, port);
             System.out.println(socket);
-            Thread t = new Listen(this);
+            Thread t = new Connection(socket, "Client");
             t.start();
 
         } catch (IOException e) {
@@ -40,25 +45,29 @@ public class Client extends Send {
         }
     }
 
-    public void Logon() throws IOException {
+    public void login() throws IOException {
             OutputStreamWriter oswriter = new OutputStreamWriter(socket.getOutputStream());
             PrintWriter pwriter = new PrintWriter(oswriter);
-            pwriter.println("logon:::::" + username + " "  + password);
+            pwriter.println("login:::::" + username + ":"  + password);
             pwriter.flush();
 
         //return 1;
     }
 
-    public void readMessage(String message) {
-        outputfield.appendText(message);
+    public static void readMessage(String message) {
+        if (message.equals("loginsuccessful")) {
+            LoginWindow.loginAllowed = true;
+        } else {
+            //Controll if message is (Logon allowed or disallowed)
+            String[] messagearray = message.split("<:::>");
+            outputfield.appendText(messagearray[0] + ":" + "\n");
+            outputfield.appendText(messagearray[1] + "\n\n");
+        }
+
     }
 
 
-
-
-
+    public String getUsername() {
+        return username;
+    }
 }
-//            OutputStreamWriter oswriter = new OutputStreamWriter(s.getOutputStream());
-//            PrintWriter pwriter = new PrintWriter(oswriter);
-//            pwriter.println("Guten Tach!");
-//            pwriter.flush();

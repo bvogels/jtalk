@@ -1,78 +1,120 @@
 package at.jtalk.connection;
 
 
+import javafx.application.Platform;
+import javafx.scene.control.Label;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import javafx.scene.paint.Color;
 
-public class Server extends Send {
+/* The implemented class Runnable enables multithreading.
+The variables of the class declaration are used as follows:
+The PORT variable stores the port number of the server. It is final.
+The CONNECTIONS list uses the generics T type, storing the connection information of the server. It is then
+specified as an ArrayList.
+Label is a JavaFx variable, indicating the connection status.
+ */
+
+public class Server implements Runnable {
     private final int PORT;
-    private Socket socket;
-    private static List<Socket> sockets = new ArrayList<>();
+    private static final List<Connection> CONNECTIONS = new ArrayList<>();
+    private static Label connectionlabel;
+
+/* This is the constructor, initializing a server object with a port. */
 
     public Server(int PORT) {
         this.PORT = PORT;
     }
 
-    public Socket getSocket(){
-        return socket;
-    }
-    public static void deletesocket(Socket s){
-        sockets.remove(s);
+/* A couple of methods to delete or add Connections to the CONNECTIONS list. */
+    public static void deleteConnection(Connection c) {
+        CONNECTIONS.remove(c);
     }
 
-    public void listen() {
-        try {
-            ServerSocket ServerSocket = new ServerSocket(PORT);
+    public static void addConnection(Connection c) {
+        CONNECTIONS.add(c);
+    }
 
-        while(true) {
-            try {
-
-                Socket socket = ServerSocket.accept();
-                System.out.println(socket);
-                this.socket = socket;
-                sockets.add(socket);
-                Thread t = new Listen(this);
-                t.start();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                break;
-            }
-        }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void setConnectionLabel(Label connectionlabel){
+        Server.connectionlabel = connectionlabel;
     }
     public void checkusernamepassword(Socket s) throws IOException {
-        InputStreamReader isreader = new InputStreamReader(s.getInputStream());
-        BufferedReader bfreader = new BufferedReader(isreader);
-        System.out.println(bfreader.readLine());
-
 
     }
-    public void readMessage(String message){
 
-        String[] messagearray = message.split(":::::");
-        if(messagearray[0].equals("sendall")){
-            for(Socket socket : sockets){
-             //   send(socket, message, chatWindowField);
-            }
-        }else if(messagearray[0].equals("Sign In")){
+/* The following method read the incoming messages. It is called by the Connection.java class. It takes a
+string as input in the format command:::::data:data:data:. In this method, the string is split at the five colons.
+The resulting array messageArray then consists of two fields. If the first field is sendall, it is a message
+that is sent to all clients in the connections lists, through which the case switch iterates.
+If the field is Sign In, a unknown user is requesting login credentials. If the field is login, a known users
+attempts to log in, and a method to verify his or her credentials is run.
 
-            signin(messagearray[1]);
+ */
+
+    public static void readMessage(String message, Connection connection) {
+
+        String[] messageArray = message.split(":::::");
+        switch (messageArray[0]) {
+            case "sendall":
+                for (Connection c : CONNECTIONS) {
+                    Send.send(c.getSOCKET(), messageArray[1]);
+                }
+                break;
+            case "Sign In":
+//                    Connection.getSocket(), messagearray[1]);
+//                    signIn(messagearray[1]);
+                break;
+            case "login":
+                if (checkIfUserExists(messageArray[1])) {
+                    Send.send(connection.getSOCKET(), "loginsuccessful");
+                } else {
+                    Send.send(connection.getSOCKET(), "loginfailed");
+                    Server.deleteConnection(connection);
+                };
+
+                break;
         }
     }
 
-    public void signin(String nachricht){
+    public static boolean checkIfUserExists(String credentials) {
+        String[] details = credentials.split(":");
+        String user = details[0];
+        String password = details[1];
+        try {
+            Scanner userdata = new Scanner(new File("users.txt"));
+            while (userdata.hasNextLine()) {
+                String line = userdata.nextLine();
+                String[] singleDetail = line.split(":");
+                if (singleDetail[0].contains(user) && singleDetail[1].contains(password)) {
+                    return true;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
-        String[] inhalt = nachricht.split(":");
-        String user = inhalt[0];
-        String password = inhalt[1];
-        String ipaddress = inhalt[2];
+
+
+/* The signIn method lets a new user subscribe to JTalk. It evaluates only the second field of the string
+received in the readMessage method. The data entered by the prospective user is separated by single colons and
+assigned to the appropriate variables. The routine looks for a file users.txt and creates it, if necessary. The
+user information is stored in there in the same format.
+
+ */
+
+    public static void signIn(String message) {
+
+        String[] contents = message.split(":");
+        String user = contents[0];
+        String password = contents[1];
+        String ipaddress = contents[2];
 
         try {
 
@@ -95,8 +137,45 @@ public class Server extends Send {
             error.printStackTrace();
         }
     }
-}
 
-//    InputStreamReader isreader = new InputStreamReader(s.getInputStream());
-//    BufferedReader bfreader = new BufferedReader(isreader);
-//            System.out.println(bfreader.readLine());
+/* A new ServerSocket object is created with the Port passed as an attribute. A thread t is also created and
+a Connection object with a socket is passed to it, if it is a Server.
+ */
+
+    @Override
+    public void run() {
+        try {
+            ServerSocket ServerSocket = new ServerSocket(PORT);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    connectionlabel.setVisible(true);
+                    connectionlabel.setText("Server started");
+                    connectionlabel.setTextFill(Color.GREEN);
+                }
+            });
+            while (true) {
+                try {
+                    Socket socket = ServerSocket.accept();
+                    Thread t = new Connection(socket, "Server");
+                    t.start();
+/*
+*/
+
+                } catch (Exception e) {
+                    System.out.println(e);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    connectionlabel.setVisible(true);
+                    connectionlabel.setText("Server can't start");
+                    connectionlabel.setTextFill(Color.RED);
+                }
+            });
+        }
+    }
+}
