@@ -9,6 +9,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /* The implemented class Runnable enables multithreading.
 The variables of the class declaration are used as follows:
@@ -60,7 +61,7 @@ attempts to log in, and a method to verify his or her credentials is run.
         switch (messageArray[0]) {
             case "sendall":
                 for (Connection c : CONNECTIONS) {
-                    Send.send(c.getSocket(), messageArray[1]);
+                    Send.send(c.getSOCKET(), messageArray[1]);
                 }
                 break;
             case "Sign In":
@@ -73,6 +74,26 @@ attempts to log in, and a method to verify his or her credentials is run.
                 break;
         }
     }
+/*
+    public static boolean checkIfUserExists(String username) {
+        String[] details = username.split(":");
+        String user = details[0];
+        String password = details[1];
+        try {
+            Scanner userdata = new Scanner(new FileInputStream("users.txt"));
+            while (userdata.hasNextLine()) {
+                String line = userdata.nextLine();
+                if (line.contains(user) && line.contains(password)) {
+                    return true;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+*/
+
 
 /* The signIn method lets a new user subscribe to JTalk. It evaluates only the second field of the string
 received in the readMessage method. The data entered by the prospective user is separated by single colons and
