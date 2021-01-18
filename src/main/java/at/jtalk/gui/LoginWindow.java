@@ -89,6 +89,7 @@ pressing the start button (don't forget to do this.)
                     Thread startserver = new Thread(new Server(port));
                     Server.setConnectionLabel(labelConnection);
                     startserver.start();
+                    loginConCirc.setFill(Color.GREEN);
                 }
             }
         } catch (Exception ignored) {

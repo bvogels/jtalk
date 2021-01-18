@@ -2,6 +2,7 @@ package at.jtalk.connection;
 
 
 import at.jtalk.gui.LoginWindow;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
@@ -12,6 +13,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ExecutionException;
 
 public class Client extends Send {
     private String username;
@@ -75,11 +77,16 @@ public class Client extends Send {
         if (message.equals("loginsuccessful")) {
             LoginWindow.loginAllowed = true;
         } else {
-            //Control if message is (Logon allowed or disallowed)
-            String[] messagearray = message.split("<:::>");
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    //Control if message is (Logon allowed or disallowed)
+                    String[] messagearray = message.split("<:::>");
 
-            outputfield.appendText(messagearray[0]+ "("+timef.format(time)+"):" + "\n");
-            outputfield.appendText(messagearray[1] + "\n\n");
+                    outputfield.appendText(messagearray[0] + "(" + timef.format(time) + "):" + "\n");
+                    outputfield.appendText(messagearray[1] + "\n\n");
+                }
+            });
         }
 
     }
