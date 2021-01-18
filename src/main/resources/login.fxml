@@ -9,6 +9,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.jtalk.gui.LoginWindow">
@@ -16,7 +17,7 @@
         <Cursor fx:constant="DEFAULT" />
     </cursor>
     <children>
-        <ImageView fitHeight="662.0" fitWidth="825.0" layoutX="-6.0">
+        <ImageView fitHeight="662.0" fitWidth="825.0" layoutX="-6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <image>
                 <Image url="@loginPicture.png" />
             </image>
@@ -35,10 +36,11 @@
         <CheckBox fx:id="runAsServer" layoutX="695.0" layoutY="603.0" mnemonicParsing="false" onAction="#checkBox" text="Run as server" textFill="#f8f8f8" />
       <TextField fx:id="ServerIpField" layoutX="35.0" layoutY="620.0" promptText="ServerIP" text="localhost" />
       <TextField fx:id="ServerPort" layoutX="203.0" layoutY="620.0" prefHeight="25.0" prefWidth="54.0" promptText="Port" text="4876" />
-      <Label fx:id= "labelConnection" layoutX="301.0" layoutY="520.0" text="Cannot connect to server" textFill="RED">
+      <Label fx:id="labelConnection" layoutX="301.0" layoutY="520.0" text="Cannot connect to server" textFill="RED">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
+      <Circle fx:id="loginConCirc" fill="#ff231f" layoutX="702.0" layoutY="634.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
     </children>
 </AnchorPane>

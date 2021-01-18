@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -40,6 +42,8 @@ public class LoginWindow implements Initializable {
     private javafx.scene.control.TextField usernameportfield;
     @FXML
     private Label labelConnection;
+    @FXML
+    private javafx.scene.shape.Circle loginConCirc;
 
     public static boolean loginAllowed; //
 
@@ -63,10 +67,11 @@ pressing the start button (don't forget to do this.)
                 if (checkIfFilled()) {
                     Client client = connectToServer();
                     client.login();
-                    TimeUnit.SECONDS.sleep(3);
+                    TimeUnit.SECONDS.sleep(2);//changed to two instead of 3
                     if (loginAllowed) {
 
                         //GUI
+                        loginConCirc.setFill(Color.GREEN); // sets connection circle on green on login screen
                         chatWindow.setConnected();
                         Stage stage = (Stage) loginButton.getScene().getWindow();
                         Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
@@ -171,5 +176,6 @@ pressing the start button (don't forget to do this.)
     public void setLabelConnection(String text){
         labelConnection.setVisible(true);
         labelConnection.setText(text);
+
     }
 }

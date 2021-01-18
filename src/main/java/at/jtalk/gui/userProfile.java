@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -60,12 +61,30 @@ public class userProfile implements Initializable{
         String ipaddress = ipAddressField.getText();
         String message = "Sign In:::::"+user+":"+password+":"+ipaddress;
 
-        EventHandler<ActionEvent> saveProfile; // this is a lambda expression
-        saveProfile = event -> {};
-        Send.send(chatclient.getSocket(),message);
+       /*  save.setOnAction(new EventHandler<ActionEvent>()  {
+            /*@Override public void handle(ActionEvent e) {
+                FileWriter fileWriter = null;
+                try {
+                    fileWriter = new FileWriter("users.txt");
+                    fileWriter.write("\n");
+                    fileWriter.write(message);
+                    fileWriter.close();
 
-        save.setOnAction(saveProfile); // the contents of the variables is stored into the file
-        exitUserProfile(); // the window is closed
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                 }*/
+
+        };
+   /* @Override
+            public void handle(ActionEvent e){
+
+        }*/
+
+
+        //save.setOnAction(saveProfile);
+        // the contents of the variables is stored into the file
+        //exitUserProfile(); // the window is closed
     }
-}
+
 

@@ -1,7 +1,9 @@
 package at.jtalk.connection;
 
 
+import at.jtalk.gui.userProfile;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 import java.io.*;
@@ -24,6 +26,7 @@ public class Server implements Runnable {
     private final int PORT;
     private static final List<Connection> CONNECTIONS = new ArrayList<>();
     private static Label connectionlabel;
+
 
 /* This is the constructor, initializing a server object with a port. */
 
@@ -66,8 +69,12 @@ attempts to log in, and a method to verify his or her credentials is run.
                 }
                 break;
             case "Sign In":
-//                    Connection.getSocket(), messagearray[1]);
-//                    signIn(messagearray[1]);
+                {
+                    signIn(messageArray[1]);
+
+
+                }
+
                 break;
             case "login":
                 if (checkIfUserExists(messageArray[1])) {
@@ -115,6 +122,7 @@ user information is stored in there in the same format.
         String user = contents[0];
         String password = contents[1];
         String ipaddress = contents[2];
+        Client client = new Client(user, password);
 
         try {
 

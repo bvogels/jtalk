@@ -28,6 +28,8 @@ public class chatWindow implements Initializable{
     @FXML
     private javafx.scene.shape.Circle connectionCircle;
 
+
+
     private static Client chatclient;
 
     private static boolean connected;
@@ -35,6 +37,8 @@ public class chatWindow implements Initializable{
     public static void setConnected() {
         connected = true;
     }
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,6 +53,9 @@ public class chatWindow implements Initializable{
             connectionLabel.setText("Connected");
             connectionLabel.setTextFill(Color.GREEN);
             connectionCircle.setFill(Color.GREEN);
+
+            //test
+
         }
     }
 
