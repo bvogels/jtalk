@@ -66,10 +66,13 @@ public class chatWindow implements Initializable{
 
     //Method for sending message to server which will show up on the chat area, afterwards it clears the message field
     public void sendText(ActionEvent actionEvent) {
-       String messagetosend = "sendall:::::" +chatclient.getUsername() + "<:::>" + messageField.getText();
-       Send.send(chatclient.getSocket(), messagetosend);
-       messageField.clear();
-
+        System.out.println("Message::::");
+        System.out.println(messageField.getText());
+        if(!messageField.getText().equals("")) {
+            String messagetosend = "sendall:::::" + chatclient.getUsername() + "<:::>" + messageField.getText();
+            Send.send(chatclient.getSocket(), messagetosend);
+            messageField.clear();
+        }
     }
 
 }

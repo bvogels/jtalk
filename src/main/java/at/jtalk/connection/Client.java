@@ -71,7 +71,7 @@ public class Client extends Send {
      else it splits the message and appends the first part to messagearray[0] which represents the username
      and messagearray[1] which represents the message*/
 
-    public static void readMessage(String message) {
+    public synchronized static void readMessage(String message) {
         if (message.equals("loginsuccessful")) {
             LoginWindow.loginAllowed = true;
         } else {
