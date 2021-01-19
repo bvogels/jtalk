@@ -83,12 +83,20 @@ pressing the start button (don't forget to do this.)
                     }
                 }
             } else {
+
+/* When the software is run as server, the following code is executed. The server is one thread, started with
+startserver.start(). It calls the constructor of a server in the Server.java class. If start is clicked then, the available
+user details are loaded through the method populateList().
+ */
+
+
                 if (checkIfFilled()) {
 
                     int port = Integer.parseInt(usernameportfield.getText());
                     Thread startserver = new Thread(new Server(port));
                     Server.setConnectionLabel(labelConnection);
                     startserver.start();
+                    Server.populateList();
                     loginConCirc.setFill(Color.GREEN);
                 }
             }

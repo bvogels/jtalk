@@ -1,18 +1,19 @@
 package at.jtalk.connection;
 
 
-import at.jtalk.gui.userProfile;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import javafx.scene.paint.Color;
 
 /* The implemented class Runnable enables multithreading.
 The variables of the class declaration are used as follows:
@@ -20,15 +21,17 @@ The PORT variable stores the port number of the server. It is final.
 The CONNECTIONS list uses the generics T type, storing the connection information of the server. It is then
 specified as an ArrayList.
 Label is a JavaFx variable, indicating the connection status.
+The ArrayList DETAILS stores user information. It is populated on startup, once "Start" is clicked when running as server.
  */
 
 public class Server implements Runnable {
     private final int PORT;
     private static final List<Connection> CONNECTIONS = new ArrayList<>();
+    private static final List<String[]> DETAILS = new ArrayList<>();
     private static Label connectionlabel;
 
 
-/* This is the constructor, initializing a server object with a port. */
+    /* This is the constructor, initializing a server object with a port. */
 
     public Server(int PORT) {
         this.PORT = PORT;
@@ -45,9 +48,6 @@ public class Server implements Runnable {
 
     public static void setConnectionLabel(Label connectionlabel){
         Server.connectionlabel = connectionlabel;
-    }
-    public void checkusernamepassword(Socket s) throws IOException {
-
     }
 
 /* The following method read the incoming messages. It is called by the Connection.java class. It takes a
@@ -88,21 +88,39 @@ attempts to log in, and a method to verify his or her credentials is run.
         }
     }
 
+/* The data of the file users.txt is read into an ArrayList, where each element of the ArrayList is a list with three fields, containing name
+password, and ip address. Thus, the validity of the credentials are checked not on the file directly but in the ArrayList.
+The method is called from the LoginWindow class as soon as the server starts and shall speed up the login process (if there are millions of users).
+ */
+
+    public static void populateList() {
+        try {
+            FileInputStream userData = new FileInputStream("users.txt");
+            Scanner data = new Scanner(userData);
+            while (data.hasNextLine()) {
+                String[] singleDetail = data.nextLine().split(":");
+                DETAILS.add(singleDetail);
+            }
+            data.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+/*  This method iterates over the list of user details, which is static in the server class. It sifts through the whole array until it finds a
+pair of username/passord that fits the details entered by the user.
+For future improvement: user/password should be a key-value-map. In its current state, nobody stops a user from entering the same values multiple
+time on sign up.
+ */
+
     public static boolean checkIfUserExists(String credentials) {
         String[] details = credentials.split(":");
         String user = details[0];
         String password = details[1];
-        try {
-            Scanner userdata = new Scanner(new File("users.txt"));
-            while (userdata.hasNextLine()) {
-                String line = userdata.nextLine();
-                String[] singleDetail = line.split(":");
-                if (singleDetail[0].contains(user) && singleDetail[1].contains(password)) {
-                    return true;
-                }
+        for (String[] users : DETAILS) {
+            if (users[0].equals(user) && users[1].equals(password)) {
+                return true;
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
         return false;
     }
