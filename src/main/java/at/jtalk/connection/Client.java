@@ -2,7 +2,9 @@ package at.jtalk.connection;
 
 
 import at.jtalk.gui.LoginWindow;
+import at.jtalk.gui.userProfile;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.paint.Color;
@@ -69,14 +71,21 @@ public class Client extends Send {
         //return 1;
     }
     /*if the username and the password is valid the variable "message" will contain the string "loginsuccessful"
-     which allows the access to the chat area
+     which allows the access to the chat area.
+     else if will transition to the sign up window, where a new user could enter his name, password and ip address
+     in order to log in the next time.
      else it splits the message and appends the first part to messagearray[0] which represents the username
-     and messagearray[1] which represents the message*/
+     and messagearray[1] which represents the message
+     */
 
-    public synchronized static void readMessage(String message) {
+    public synchronized static void readMessage(String message) throws IOException {
         if (message.equals("loginsuccessful")) {
             LoginWindow.loginAllowed = true;
-        } else {
+        }
+        else if (message.equals("newSignIn")) {
+            FXMLLoader.load(Client.class.getResource("/userProfile.fxml"));;
+        }
+        else {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {

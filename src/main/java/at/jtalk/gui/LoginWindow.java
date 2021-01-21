@@ -3,7 +3,6 @@ package at.jtalk.gui;
 import at.jtalk.connection.Client;
 import at.jtalk.connection.Server;
 import javafx.fxml.FXML;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -12,7 +11,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -52,7 +50,7 @@ public class LoginWindow implements Initializable {
         labelConnection.setVisible(false);
     }
 
-/* This is the method to build the login mechanics. If the username and password fields are filled, the client
+/* This is the method to build the login mechanism. If the username and password fields are filled, the client
 is allowed to connect to the server (via method connectToServer()). This is only executed if the checkbox
 runAsServer is not clicked. However, if it is clicked, the else block is executed and the server is started upon
 pressing the start button (don't forget to do this.)
@@ -96,7 +94,7 @@ user details are loaded through the method populateList().
                     Thread startserver = new Thread(new Server(port));
                     Server.setConnectionLabel(labelConnection);
                     startserver.start();
-                    Server.populateList();
+                    Server.populateUserDataList();
                     loginConCirc.setFill(Color.GREEN);
                 }
             }

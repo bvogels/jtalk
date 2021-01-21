@@ -69,12 +69,8 @@ attempts to log in, and a method to verify his or her credentials is run.
                 }
                 break;
             case "Sign In":
-                {
-                    signIn(messageArray[1]);
-
-
-                }
-
+                signIn(messageArray[1]);
+                Send.send(connection.getSOCKET(), "newSignIn");
                 break;
             case "login":
                 if (checkIfUserExists(messageArray[1])) {
@@ -83,7 +79,6 @@ attempts to log in, and a method to verify his or her credentials is run.
                     Send.send(connection.getSOCKET(), "loginfailed");
                     Server.deleteConnection(connection);
                 };
-
                 break;
         }
     }
@@ -93,7 +88,7 @@ password, and ip address. Thus, the validity of the credentials are checked not 
 The method is called from the LoginWindow class as soon as the server starts and shall speed up the login process (if there are millions of users).
  */
 
-    public static void populateList() {
+    public static void populateUserDataList() {
         try {
             FileInputStream userData = new FileInputStream("users.txt");
             Scanner data = new Scanner(userData);
@@ -140,28 +135,33 @@ user information is stored in there in the same format.
         String user = contents[0];
         String password = contents[1];
         String ipaddress = contents[2];
-        Client client = new Client(user, password);
+//        Client client = new Client(user, password);
+        for (String[] users : DETAILS) {
+            if (!users[0].equals(user)) {
+                try {
 
-        try {
-
-            File users = new File("users.txt");
-            if (users.createNewFile()) {
-                System.out.println("Created new file of user names with name users.txt");
-            } else {
-                System.out.println("File already exists. Appending.");
+                    File userFile = new File("users.txt");
+                    if (userFile.createNewFile()) {
+                        System.out.println("Created new file of user names with name users.txt");
+                    } else {
+                        System.out.println("File already exists. Appending.");
+                    }
+                } catch (IOException error) {
+                    System.out.println("Bad luck. File could not be created.");
+                    error.printStackTrace();
+                }
+                try {
+                    FileWriter saveUserDetails = new FileWriter("users.txt", true);
+                    saveUserDetails.write(user + ":" + password + ":" + ipaddress + "\n");
+                    saveUserDetails.close();
+                } catch (IOException error) {
+                    System.out.println("Bad luck. Data could not be written.");
+                    error.printStackTrace();
+                }
             }
-        } catch (IOException error) {
-            System.out.println("Bad luck. File could not be created.");
-            error.printStackTrace();
         }
-        try {
-            FileWriter saveUserDetails = new FileWriter("users.txt", true);
-            saveUserDetails.write(user + ":" + password + ":" + ipaddress + "\n");
-            saveUserDetails.close();
-        } catch (IOException error) {
-            System.out.println("Bad luck. Data could not be written.");
-            error.printStackTrace();
-        }
+
+
     }
 
 /* A new ServerSocket object is created with the Port passed as an attribute. A thread t is also created and

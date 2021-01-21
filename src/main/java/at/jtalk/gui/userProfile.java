@@ -55,36 +55,20 @@ public class userProfile implements Initializable{
     public void saveUserProfile() throws IOException {
 
         // When save button is clicked, the details are saved
-
         String user = signUpUser.getText();
         String password = signUpPassword.getText();
         String ipaddress = ipAddressField.getText();
         String message = "Sign In:::::"+user+":"+password+":"+ipaddress;
+        Send.send(chatclient.getSocket(),message);
+        EventHandler<ActionEvent> saveProfile; // this is a lambda expression
+        saveProfile = event -> {};
 
-       /*  save.setOnAction(new EventHandler<ActionEvent>()  {
-            /*@Override public void handle(ActionEvent e) {
-                FileWriter fileWriter = null;
-                try {
-                    fileWriter = new FileWriter("users.txt");
-                    fileWriter.write("\n");
-                    fileWriter.write(message);
-                    fileWriter.close();
+        save.setOnAction(saveProfile); // the contents of the variables is stored into the file
+        exitUserProfile(); // the window is closed
 
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-                 }*/
 
         };
-   /* @Override
-            public void handle(ActionEvent e){
 
-        }*/
-
-
-        //save.setOnAction(saveProfile);
-        // the contents of the variables is stored into the file
-        //exitUserProfile(); // the window is closed
     }
 
 
