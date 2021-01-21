@@ -29,7 +29,7 @@ public class Server implements Runnable {
     private static final List<Connection> CONNECTIONS = new ArrayList<>();
     private static final List<String[]> DETAILS = new ArrayList<>();
     private static Label connectionlabel;
-
+    private static List<String> usernames = new ArrayList<>();
 
     /* This is the constructor, initializing a server object with a port. */
 
@@ -70,11 +70,19 @@ attempts to log in, and a method to verify his or her credentials is run.
                 break;
             case "Sign In":
                 signIn(messageArray[1]);
-                Send.send(connection.getSOCKET(), "newSignIn");
+
                 break;
             case "login":
                 if (checkIfUserExists(messageArray[1])) {
                     Send.send(connection.getSOCKET(), "loginsuccessful");
+                    StringBuilder users = new StringBuilder();
+                    users.append("ALLUSERS ");
+                    for(String username : usernames){
+                        users.append(username);
+                        users.append(" ");
+                    }
+                    Send.send(connection.getSOCKET(), users.toString());
+
                 } else {
                     Send.send(connection.getSOCKET(), "loginfailed");
                     Server.deleteConnection(connection);
@@ -113,8 +121,10 @@ time on sign up.
         String user = details[0];
         String password = details[1];
         for (String[] users : DETAILS) {
-            if (users[0].equals(user) && users[1].equals(password)) {
+            if (users[0].toLowerCase().equals(user.toLowerCase()) && users[1].equals(password)) {
+                usernames.add(user);
                 return true;
+
             }
         }
         return false;
@@ -136,31 +146,34 @@ user information is stored in there in the same format.
         String password = contents[1];
         String ipaddress = contents[2];
 //        Client client = new Client(user, password);
+        boolean userexists = false;
         for (String[] users : DETAILS) {
-            if (!users[0].equals(user)) {
-                try {
-
-                    File userFile = new File("users.txt");
-                    if (userFile.createNewFile()) {
-                        System.out.println("Created new file of user names with name users.txt");
-                    } else {
-                        System.out.println("File already exists. Appending.");
-                    }
-                } catch (IOException error) {
-                    System.out.println("Bad luck. File could not be created.");
-                    error.printStackTrace();
-                }
-                try {
-                    FileWriter saveUserDetails = new FileWriter("users.txt", true);
-                    saveUserDetails.write(user + ":" + password + ":" + ipaddress + "\n");
-                    saveUserDetails.close();
-                } catch (IOException error) {
-                    System.out.println("Bad luck. Data could not be written.");
-                    error.printStackTrace();
-                }
+            if (users[0].equals(user)) {
+                userexists = true;
             }
         }
+        if (!userexists){
+            try {
 
+                File userFile = new File("users.txt");
+                if (userFile.createNewFile()) {
+                    System.out.println("Created new file of user names with name users.txt");
+                } else {
+                    System.out.println("File already exists. Appending.");
+                }
+            } catch (IOException error) {
+                System.out.println("Bad luck. File could not be created.");
+                error.printStackTrace();
+            }
+            try {
+                FileWriter saveUserDetails = new FileWriter("users.txt", true);
+                saveUserDetails.write(user + ":" + password + ":" + ipaddress + "\n");
+                saveUserDetails.close();
+            } catch (IOException error) {
+                System.out.println("Bad luck. Data could not be written.");
+                error.printStackTrace();
+            }
+        }
 
     }
 

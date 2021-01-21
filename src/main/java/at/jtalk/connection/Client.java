@@ -82,8 +82,11 @@ public class Client extends Send {
         if (message.equals("loginsuccessful")) {
             LoginWindow.loginAllowed = true;
         }
-        else if (message.equals("newSignIn")) {
-            FXMLLoader.load(Client.class.getResource("/userProfile.fxml"));;
+        else if (message.startsWith("ALLUSERS")) {
+            String[] messagearray = message.split(" ");
+            for(String username : messagearray){
+                System.out.println(username);
+            }
         }
         else {
             Platform.runLater(new Runnable() {

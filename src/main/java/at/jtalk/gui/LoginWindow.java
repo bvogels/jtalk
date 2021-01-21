@@ -109,8 +109,9 @@ user details are loaded through the method populateList().
     @FXML
     public void signUp() throws IOException{
         if(!checkIfFilled()) {
-            connectToServer();
+            Client client = connectToServer();
             chatWindow.setConnected();
+            userProfile.setClient(client);
 
             Stage stage = (Stage) signUpButton.getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource("/userProfile.fxml"));

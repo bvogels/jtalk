@@ -16,6 +16,7 @@ public class Connection extends Thread {
     private final Socket SOCKET;
     private final String CLIENTORSERVER;
 
+
     public Connection(Socket SOCKET, String CLIENTORSERVER) {
         this.CLIENTORSERVER = CLIENTORSERVER;
         this.SOCKET = SOCKET;

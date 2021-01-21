@@ -60,10 +60,7 @@ public class userProfile implements Initializable{
         String ipaddress = ipAddressField.getText();
         String message = "Sign In:::::"+user+":"+password+":"+ipaddress;
         Send.send(chatclient.getSocket(),message);
-        EventHandler<ActionEvent> saveProfile; // this is a lambda expression
-        saveProfile = event -> {};
 
-        save.setOnAction(saveProfile); // the contents of the variables is stored into the file
         exitUserProfile(); // the window is closed
 
 
