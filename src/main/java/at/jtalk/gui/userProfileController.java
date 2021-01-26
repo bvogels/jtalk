@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -17,18 +18,21 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class userProfile implements Initializable{
+public class userProfileController implements Initializable{
 
     @FXML
     private javafx.scene.control.Button exit;
     @FXML
     private javafx.scene.control.Button save;
     @FXML
-    TextField signUpUser;
+    private TextField signUpUser;
     @FXML
-    TextField signUpPassword;
+    private TextField signUpPassword;
     @FXML
-    TextField ipAddressField;
+    private TextField ipAddressField;
+    @FXML
+    public static Label usernameTaken;
+
 
     private static Client chatclient;
 

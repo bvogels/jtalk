@@ -1,13 +1,10 @@
 package at.jtalk.connection;
 
 
-import at.jtalk.gui.LoginWindow;
-import at.jtalk.gui.userProfile;
+import at.jtalk.gui.loginWindowController;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.paint.Color;
+
 import java.time.LocalTime;
 
 import java.io.IOException;
@@ -15,7 +12,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.ExecutionException;
 
 public class Client extends Send {
     private String username;
@@ -80,7 +76,7 @@ public class Client extends Send {
 
     public synchronized static void readMessage(String message) throws IOException {
         if (message.equals("loginsuccessful")) {
-            LoginWindow.loginAllowed = true;
+            loginWindowController.loginAllowed = true;
         }
         else if (message.startsWith("ALLUSERS")) {
             String[] messagearray = message.split(" ");
@@ -92,10 +88,12 @@ public class Client extends Send {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
+
+
                     //Control if message is (Logon allowed or disallowed)
                     String[] messagearray = message.split("<:::>");
 
-                    outputfield.appendText(messagearray[0] + "(" + timef.format(time) + "):" + "\n");
+                    outputfield.appendText(messagearray[0] + " (" + timef.format(time) + "):" + "\n");
                     outputfield.appendText(messagearray[1] + "\n\n");
                 }
             });
@@ -107,4 +105,5 @@ public class Client extends Send {
     public String getUsername() {
         return username;
     }
+    
 }

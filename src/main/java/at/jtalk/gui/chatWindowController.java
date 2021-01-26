@@ -6,14 +6,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class chatWindow implements Initializable{
+import static at.jtalk.connection.Server.usernames;
+
+public class chatWindowController implements Initializable{
 
     @FXML
     private TextField messageField;
@@ -27,25 +31,31 @@ public class chatWindow implements Initializable{
     private javafx.scene.control.Label connectionLabel;
     @FXML
     private javafx.scene.shape.Circle connectionCircle;
-
-
+    @FXML
+    private Pane chatPane;
 
     private static Client chatclient;
 
     private static boolean connected;
+
+
 
     public static void setConnected() {
         connected = true;
     }
 
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Client.setOutputField(chatWindowField);
+        chatWindowField.setEditable(false);
+        chatWindowField.setStyle("-fx-text-fill: black;");
         setConnectionGui();
 
-    }
+
+        }
+
+
 
     /*changes the colour of circle in chat window to green and sets the label to "connected" when connected to server*/
     public void setConnectionGui(){
@@ -66,6 +76,7 @@ public class chatWindow implements Initializable{
 
     //Method for sending message to server which will show up on the chat area, afterwards it clears the message field
     public void sendText(ActionEvent actionEvent) {
+
         System.out.println("Message::::");
         System.out.println(messageField.getText());
         if(!messageField.getText().equals("")) {

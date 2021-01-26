@@ -18,7 +18,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
-public class LoginWindow implements Initializable {
+
+public class loginWindowController implements Initializable {
 
     @FXML
     private CheckBox runAsServer;
@@ -47,6 +48,10 @@ public class LoginWindow implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        if(Server.serverHasStarted) {
+
+            loginConCirc.setFill(Color.GREEN);
+        }
         labelConnection.setVisible(false);
     }
 
@@ -65,12 +70,12 @@ pressing the start button (don't forget to do this.)
                 if (checkIfFilled()) {
                     Client client = connectToServer();
                     client.login();
-                    TimeUnit.SECONDS.sleep(2);//changed to two instead of 3
+                    TimeUnit.SECONDS.sleep(3);//changed to two instead of 3
                     if (loginAllowed) {
 
                         //GUI
                         loginConCirc.setFill(Color.GREEN); // sets connection circle on green on login screen
-                        chatWindow.setConnected();
+                        chatWindowController.setConnected();
                         Stage stage = (Stage) loginButton.getScene().getWindow();
                         Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
                         Scene scene = new Scene(root);
@@ -87,7 +92,6 @@ startserver.start(). It calls the constructor of a server in the Server.java cla
 user details are loaded through the method populateList().
  */
 
-
                 if (checkIfFilled()) {
 
                     int port = Integer.parseInt(usernameportfield.getText());
@@ -95,10 +99,14 @@ user details are loaded through the method populateList().
                     Server.setConnectionLabel(labelConnection);
                     startserver.start();
                     Server.populateUserDataList();
-                    loginConCirc.setFill(Color.GREEN);
+                    if(Server.serverHasStarted) {
+
+                        loginConCirc.setFill(Color.GREEN);
+                    }
                 }
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            System.out.println(e);
             }
         }
 
@@ -108,16 +116,21 @@ user details are loaded through the method populateList().
 
     @FXML
     public void signUp() throws IOException{
-        if(!checkIfFilled()) {
-            Client client = connectToServer();
-            chatWindow.setConnected();
-            userProfile.setClient(client);
+        if(Server.serverHasStarted) {
+            if (!checkIfFilled()) {
+                Client client = connectToServer();
+                chatWindowController.setConnected();
+                userProfileController.setClient(client);
 
-            Stage stage = (Stage) signUpButton.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("/userProfile.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+                Stage stage = (Stage) signUpButton.getScene().getWindow();
+                Parent root = FXMLLoader.load(getClass().getResource("/userProfile.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        }else{
+            labelConnection.setVisible(true);
+            labelConnection.setText("Connection to server required");
         }
     }
 
@@ -156,7 +169,7 @@ user details are loaded through the method populateList().
             String password = passwordField.getText();
             Client client = new Client(username, password);
             client.connectServer(serverIpAddress, serverPort);
-            chatWindow.setClient(client);
+            chatWindowController.setClient(client);
 
             return client;
     }
@@ -184,6 +197,7 @@ user details are loaded through the method populateList().
     public void setLabelConnection(String text){
         labelConnection.setVisible(true);
         labelConnection.setText(text);
+
 
     }
 }

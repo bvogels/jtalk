@@ -1,6 +1,7 @@
 package at.jtalk.connection;
 
 
+import at.jtalk.gui.userProfileController;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -29,7 +30,8 @@ public class Server implements Runnable {
     private static final List<Connection> CONNECTIONS = new ArrayList<>();
     private static final List<String[]> DETAILS = new ArrayList<>();
     private static Label connectionlabel;
-    private static List<String> usernames = new ArrayList<>();
+    public static List<String> usernames = new ArrayList<>();
+    public static boolean serverHasStarted = false;
 
     /* This is the constructor, initializing a server object with a port. */
 
@@ -111,7 +113,7 @@ The method is called from the LoginWindow class as soon as the server starts and
     }
 
 /*  This method iterates over the list of user details, which is static in the server class. It sifts through the whole array until it finds a
-pair of username/passord that fits the details entered by the user.
+pair of username/password that fits the details entered by the user.
 For future improvement: user/password should be a key-value-map. In its current state, nobody stops a user from entering the same values multiple
 time on sign up.
  */
@@ -150,6 +152,7 @@ user information is stored in there in the same format.
         for (String[] users : DETAILS) {
             if (users[0].equals(user)) {
                 userexists = true;
+
             }
         }
         if (!userexists){
@@ -174,6 +177,9 @@ user information is stored in there in the same format.
                 error.printStackTrace();
             }
         }
+        else if(userexists) {
+            userProfileController.usernameTaken.setVisible(true);
+        }
 
     }
 
@@ -185,12 +191,15 @@ a Connection object with a socket is passed to it, if it is a Server.
     public void run() {
         try {
             ServerSocket ServerSocket = new ServerSocket(PORT);
+            serverHasStarted = true;
+            //queue for befehle, falls thread gerade nicht an der reihe ist
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     connectionlabel.setVisible(true);
                     connectionlabel.setText("Server started");
                     connectionlabel.setTextFill(Color.GREEN);
+
                 }
             });
             while (true) {
