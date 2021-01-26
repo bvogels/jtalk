@@ -18,8 +18,7 @@ public class Client extends Send {
     private String password;
     private Socket socket;
     private static TextArea outputfield;
-    private static LocalTime time = LocalTime.now();
-    private static DateTimeFormatter timef = DateTimeFormatter.ofPattern("h:mm a");
+
 
     public Client(String username, String password) {
         this.username = username;
@@ -92,7 +91,8 @@ public class Client extends Send {
 
                     //Control if message is (Logon allowed or disallowed)
                     String[] messagearray = message.split("<:::>");
-
+                    LocalTime time = LocalTime.now();
+                    DateTimeFormatter timef = DateTimeFormatter.ofPattern("h:mm a");
                     outputfield.appendText(messagearray[0] + " (" + timef.format(time) + "):" + "\n");
                     outputfield.appendText(messagearray[1] + "\n\n");
                 }
