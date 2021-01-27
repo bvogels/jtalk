@@ -2,13 +2,6 @@ florentina:idontknow:10.0.0.1
 benjamin:sternschnuppe:10.0.0.2
 markus:sonnenblume:10.0.0.3
 sepp:hallo:10.0.20.0
-sepp:hallo:10.0.20.0
-sepp:hallo:10.0.20.0
-fritz:test:test
-fritz:test:test
-fritz:test:test
-fritz:test:test
-fritz:test:test
 sabine:test:10.0.0.10
 carola:hallo:10.1.1.1
-
+franziska:speisewagen:10.0.0.2
