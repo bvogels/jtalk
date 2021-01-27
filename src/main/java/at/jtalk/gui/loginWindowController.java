@@ -181,11 +181,11 @@ user details are loaded through the method populateList().
 
     public boolean checkIfFilled(){
         if((ServerIpField.getText().isEmpty() || ServerPort.getText().isEmpty() || usernameportfield.getText().isEmpty() || passwordField.getText().isEmpty()) && !runAsServer.isSelected()){
-            setLabelConnection("Bitte alle Felder ausfuellen");
+            setLabelConnection("Please fill out all fields.");
             return false;
 
         }else if(usernameportfield.getText().isEmpty() && runAsServer.isSelected()) {
-            setLabelConnection("Bitte Port ausfuellen");
+            setLabelConnection("Please enter a valid port number");
             return false;
         }
         else
