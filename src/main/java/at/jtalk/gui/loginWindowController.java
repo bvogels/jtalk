@@ -82,6 +82,7 @@ pressing the start button (don't forget to do this.)
                         stage.setScene(scene);
                         stage.show();
                     } else {
+                        labelConnection.setTextFill(Color.RED);
                         setLabelConnection("Wrong credentials.");
                     }
                 }
@@ -100,7 +101,6 @@ user details are loaded through the method populateList().
                     startserver.start();
                     Server.populateUserDataList();
                     if(Server.serverHasStarted) {
-
                         loginConCirc.setFill(Color.GREEN);
                     }
                 }
@@ -130,6 +130,7 @@ user details are loaded through the method populateList().
             }
         }else{
             labelConnection.setVisible(true);
+            labelConnection.setTextFill(Color.RED);
             labelConnection.setText("Connection to server required");
         }
     }
@@ -181,11 +182,13 @@ user details are loaded through the method populateList().
 
     public boolean checkIfFilled(){
         if((ServerIpField.getText().isEmpty() || ServerPort.getText().isEmpty() || usernameportfield.getText().isEmpty() || passwordField.getText().isEmpty()) && !runAsServer.isSelected()){
-            setLabelConnection("Please fill out all fields.");
+            labelConnection.setTextFill(Color.RED);
+            setLabelConnection("Please fill in all fields");
             return false;
 
         }else if(usernameportfield.getText().isEmpty() && runAsServer.isSelected()) {
-            setLabelConnection("Please enter a valid port number");
+            labelConnection.setTextFill(Color.RED);
+            setLabelConnection("Port field is empty");
             return false;
         }
         else
