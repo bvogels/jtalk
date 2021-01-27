@@ -55,7 +55,7 @@ public class userProfileController implements Initializable{
     }
 
     /*Method saves username, password and ipaddress and concatenates them in a new string where the variables are separated by ":". Furthermore,
-    * the input of the string "message" will be written to a file*/
+    * the input of the string "message" will be written to a file from the server*/
     public void saveUserProfile() throws IOException {
 
         // When save button is clicked, the details are saved
