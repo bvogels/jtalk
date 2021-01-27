@@ -45,10 +45,12 @@ public class loginWindowController implements Initializable {
     private javafx.scene.shape.Circle loginConCirc;
 
     public static boolean loginAllowed; //
+    public static boolean serverHasStarted = false;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(Server.serverHasStarted) {
+        if(serverHasStarted) {
 
             loginConCirc.setFill(Color.GREEN);
         }
@@ -66,31 +68,39 @@ pressing the start button (don't forget to do this.)
 
         try {
             if (!runAsServer.isSelected()) {
+
                 //Connection
                 if (checkIfFilled()) {
                     Client client = connectToServer();
-                    client.login();
-                    TimeUnit.SECONDS.sleep(3);//changed to two instead of 3
-                    if (loginAllowed) {
+                    if (serverHasStarted) {
 
-                        //GUI
-                        loginConCirc.setFill(Color.GREEN); // sets connection circle on green on login screen
-                        chatWindowController.setConnected();
-                        Stage stage = (Stage) loginButton.getScene().getWindow();
-                        Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
-                        Scene scene = new Scene(root);
-                        stage.setScene(scene);
-                        stage.show();
+                        client.login();
+                        TimeUnit.SECONDS.sleep(3);//changed to two instead of 3
+                        if (loginAllowed) {
+
+                            //GUI
+                            loginConCirc.setFill(Color.GREEN); // sets connection circle on green on login screen
+                            chatWindowController.setConnected();
+                            Stage stage = (Stage) loginButton.getScene().getWindow();
+                            Parent root = FXMLLoader.load(getClass().getResource("/chatWindow.fxml"));
+                            Scene scene = new Scene(root);
+                            stage.setScene(scene);
+                            stage.show();
+                        } else {
+                            labelConnection.setTextFill(Color.RED);
+                            setLabelConnection("Wrong credentials.");
+                        }
                     } else {
+                        labelConnection.setVisible(true);
                         labelConnection.setTextFill(Color.RED);
-                        setLabelConnection("Wrong credentials.");
+                        labelConnection.setText("Connection to server required");
                     }
                 }
             } else {
 
 /* When the software is run as server, the following code is executed. The server is one thread, started with
 startserver.start(). It calls the constructor of a server in the Server.java class. If start is clicked then, the available
-user details are loaded through the method populateList().
+user details are loaded through the method populateUserDataList().
  */
 
                 if (checkIfFilled()) {
@@ -100,7 +110,7 @@ user details are loaded through the method populateList().
                     Server.setConnectionLabel(labelConnection);
                     startserver.start();
                     Server.populateUserDataList();
-                    if(Server.serverHasStarted) {
+                    if(serverHasStarted) {
                         loginConCirc.setFill(Color.GREEN);
                     }
                 }
@@ -116,23 +126,22 @@ user details are loaded through the method populateList().
 
     @FXML
     public void signUp() throws IOException{
-        if(Server.serverHasStarted) {
             if (!checkIfFilled()) {
                 Client client = connectToServer();
-                chatWindowController.setConnected();
-                userProfileController.setClient(client);
-
-                Stage stage = (Stage) signUpButton.getScene().getWindow();
-                Parent root = FXMLLoader.load(getClass().getResource("/userProfile.fxml"));
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+                if (serverHasStarted) {
+                    chatWindowController.setConnected();
+                    userProfileController.setClient(client);
+                    Stage stage = (Stage) signUpButton.getScene().getWindow();
+                    Parent root = FXMLLoader.load(getClass().getResource("/userProfile.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                } else {
+                    labelConnection.setVisible(true);
+                    labelConnection.setTextFill(Color.RED);
+                    labelConnection.setText("Connection to server required");
+                }
             }
-        }else{
-            labelConnection.setVisible(true);
-            labelConnection.setTextFill(Color.RED);
-            labelConnection.setText("Connection to server required");
-        }
     }
 
 /* Just a couple of text fields. It is checked at the beginning if the checkbox runAsServer has been checked. */
@@ -140,6 +149,7 @@ user details are loaded through the method populateList().
     @FXML
     public void checkBox() {
         if(runAsServer.isSelected()){
+            runAsServer.setText("Server mode");
             userLabel.setText("Port");
             passwordField.setVisible(false);
             passwordLabel.setVisible(false);
@@ -149,6 +159,7 @@ user details are loaded through the method populateList().
             labelConnection.setVisible(false);
         }
         else{
+            runAsServer.setText("Client mode");
             userLabel.setText("Username");
             passwordField.setVisible(true);
             passwordLabel.setVisible(true);

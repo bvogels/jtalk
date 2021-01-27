@@ -31,7 +31,6 @@ public class Server implements Runnable {
     private static final List<String[]> DETAILS = new ArrayList<>();
     private static Label connectionlabel;
     public static List<String> usernames = new ArrayList<>();
-    public static boolean serverHasStarted = false;
 
     /* This is the constructor, initializing a server object with a port. */
 
@@ -191,7 +190,7 @@ a Connection object with a socket is passed to it, if it is a Server.
     public void run() {
         try {
             ServerSocket ServerSocket = new ServerSocket(PORT);
-            serverHasStarted = true;
+            //serverHasStarted = true;
             //queue for befehle, falls thread gerade nicht an der reihe ist
             Platform.runLater(new Runnable() {
                 @Override

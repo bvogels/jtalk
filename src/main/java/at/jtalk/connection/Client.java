@@ -20,6 +20,7 @@ public class Client extends Send {
     private static TextArea outputfield;
 
 
+
     public Client(String username, String password) {
         this.username = username;
         this.password = password;
@@ -46,9 +47,12 @@ public class Client extends Send {
     public void connectServer(String ipaddress, int port) {
         try {
             socket = new Socket(ipaddress, port);
-            System.out.println(socket);
-            Thread t = new Connection(socket, "Client");
-            t.start();
+            if (socket.isConnected()) {
+                loginWindowController.serverHasStarted = true;
+                System.out.println(socket);
+                Thread t = new Connection(socket, "Client");
+                t.start();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
