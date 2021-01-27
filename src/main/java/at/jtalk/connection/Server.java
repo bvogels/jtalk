@@ -40,15 +40,16 @@ public class Server implements Runnable {
     }
 
 /* A couple of methods to delete or add Connections to the CONNECTIONS list. */
-    public static void deleteConnection(Connection c) {
-        CONNECTIONS.remove(c);
+    public static void deleteConnection(Connection connection) {
+        CONNECTIONS.remove(connection);
         StringBuilder susernames = new StringBuilder();
-        susernames.append("ALLUSERS");
-        for(Connection connection : CONNECTIONS){
-            susernames.append(connection.getUSERNAME()).append("\n");
+
+        susernames.append("Username: ");
+        for(Connection c : CONNECTIONS){
+            susernames.append(c.getUSERNAME()).append(" ");
         }
-        for(Connection connection : CONNECTIONS){
-            Send.send(connection.getSOCKET(), susernames.toString());
+        for(Connection c : CONNECTIONS){
+            Send.send(c.getSOCKET(), susernames.toString());
         }
 
     }
