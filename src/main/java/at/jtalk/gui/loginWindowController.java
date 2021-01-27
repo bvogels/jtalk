@@ -66,6 +66,7 @@ pressing the start button (don't forget to do this.)
     @FXML
     public void loginAccept() {
 
+
         try {
             if (!runAsServer.isSelected()) {
 

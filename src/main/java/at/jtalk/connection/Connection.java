@@ -50,6 +50,7 @@ public class Connection extends Thread {
             }
             catch (IOException e) {
                 Server.deleteConnection(this);
+                
                 break;
             }
         }
