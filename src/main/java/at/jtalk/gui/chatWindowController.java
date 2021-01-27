@@ -15,8 +15,6 @@ import javafx.scene.paint.Color;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static at.jtalk.connection.Server.usernames;
-
 public class chatWindowController implements Initializable{
 
     @FXML
@@ -31,6 +29,8 @@ public class chatWindowController implements Initializable{
     private javafx.scene.control.Label connectionLabel;
     @FXML
     private javafx.scene.shape.Circle connectionCircle;
+    @FXML
+    private Label userList;
     @FXML
     private Pane chatPane;
 
@@ -47,14 +47,13 @@ public class chatWindowController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Client.setOutputField(chatWindowField);
+        Client.setOutputFields(chatWindowField, connectionCircle, connectionLabel, userList);
         chatWindowField.setEditable(false);
         chatWindowField.setStyle("-fx-text-fill: black;");
         setConnectionGui();
 
 
         }
-
 
 
     /*changes the colour of circle in chat window to green and sets the label to "connected" when connected to server*/

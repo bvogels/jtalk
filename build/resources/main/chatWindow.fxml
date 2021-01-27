@@ -16,6 +16,7 @@
          <children>
               <Label fx:id="connectionLabel" layoutX="27.0" layoutY="21.0" text="disconnected" textFill="RED" />
               <Circle fx:id="connectionCircle" fill="RED" layoutX="14.0" layoutY="29.0" radius="7.0" smooth="false" stroke="BLACK" strokeType="INSIDE" />
+            <Label fx:id="userList" layoutX="8.0" layoutY="85.0" prefHeight="451.0" prefWidth="98.0" text="Label" />
          </children></Pane>
         <TextField fx:id="groupNameField" alignment="CENTER" disable="true" layoutX="119.0" layoutY="7.0" prefHeight="50.0" prefWidth="644.0" style="-fx-background-color: white;" text="J-Talk">
             <font>

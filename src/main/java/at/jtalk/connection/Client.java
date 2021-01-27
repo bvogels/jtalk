@@ -3,7 +3,10 @@ package at.jtalk.connection;
 
 import at.jtalk.gui.loginWindowController;
 import javafx.application.Platform;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 import java.time.LocalTime;
 
@@ -12,12 +15,16 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ExecutionException;
 
 public class Client extends Send {
     private String username;
     private String password;
     private Socket socket;
     private static TextArea outputfield;
+    private static Circle outputConnectionCircle;
+    private static Label outputconnectionLabel;
+    private static Label outputUserList;
 
 
 
@@ -27,8 +34,11 @@ public class Client extends Send {
 
     }
     //assigning chat window textfield to "outputfield" -> static variable
-    public static void setOutputField(TextArea chatWindowField) {
+    public static void setOutputFields(TextArea chatWindowField, Circle connectionCircle, Label connectionLabel, Label userList) {
         outputfield = chatWindowField;
+        outputConnectionCircle = connectionCircle;
+        outputconnectionLabel = connectionLabel;
+        outputUserList = userList;
     }
     //getter Method for Socket
     public Socket getSocket(){
@@ -77,21 +87,31 @@ public class Client extends Send {
      and messagearray[1] which represents the message
      */
 
-    public synchronized static void readMessage(String message) throws IOException {
+    public synchronized static void readMessage(String message) {
+        try{
         if (message.equals("loginsuccessful")) {
             loginWindowController.loginAllowed = true;
         }
-        else if (message.startsWith("ALLUSERS")) {
+        else if (message.startsWith("Username")) {
             String[] messagearray = message.split(" ");
+            StringBuilder soutputnames = new StringBuilder();
             for(String username : messagearray){
-                System.out.println(username);
+                if(!username.equals("null")) {
+                    soutputnames.append(username + "\n");
+                }
             }
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    outputUserList.setText(soutputnames.toString());
+                }
+            });
+
         }
         else {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-
 
                     //Control if message is (Logon allowed or disallowed)
                     String[] messagearray = message.split("<:::>");
@@ -99,6 +119,16 @@ public class Client extends Send {
                     DateTimeFormatter timef = DateTimeFormatter.ofPattern("h:mm a");
                     outputfield.appendText(messagearray[0] + " (" + timef.format(time) + "):" + "\n");
                     outputfield.appendText(messagearray[1] + "\n\n");
+                }
+            });
+        }
+        } catch (Exception e){
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    outputconnectionLabel.setText("disconnected \n restart \n program");
+                    outputconnectionLabel.setTextFill(Color.RED);
+                    outputConnectionCircle.setFill(Color.RED);
                 }
             });
         }

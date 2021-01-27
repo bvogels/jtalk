@@ -15,13 +15,21 @@ runtime.
 public class Connection extends Thread {
     private final Socket SOCKET;
     private final String CLIENTORSERVER;
+    private String USERNAME;
 
 
     public Connection(Socket SOCKET, String CLIENTORSERVER) {
         this.CLIENTORSERVER = CLIENTORSERVER;
         this.SOCKET = SOCKET;
         Server.addConnection(this);
+    }
 
+    public void setUSERNAME(String USERNAME){
+        this.USERNAME = USERNAME;
+    }
+
+    public String getUSERNAME(){
+        return USERNAME;
     }
 
     public Socket getSOCKET() {
@@ -31,7 +39,6 @@ public class Connection extends Thread {
 /* In this method the server or the client read the incoming messages.
 
  */
-
     @Override
     public void run() {
         while(true)
@@ -49,6 +56,7 @@ public class Connection extends Thread {
 
             }
             catch (IOException e) {
+                System.out.println(e);
                 Server.deleteConnection(this);
                 
                 break;

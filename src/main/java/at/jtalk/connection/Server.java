@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /* The implemented class Runnable enables multithreading.
 The variables of the class declaration are used as follows:
@@ -30,7 +31,7 @@ public class Server implements Runnable {
     private static final List<Connection> CONNECTIONS = new ArrayList<>();
     private static final List<String[]> DETAILS = new ArrayList<>();
     private static Label connectionlabel;
-    public static List<String> usernames = new ArrayList<>();
+
 
     /* This is the constructor, initializing a server object with a port. */
 
@@ -41,6 +42,15 @@ public class Server implements Runnable {
 /* A couple of methods to delete or add Connections to the CONNECTIONS list. */
     public static void deleteConnection(Connection c) {
         CONNECTIONS.remove(c);
+        StringBuilder susernames = new StringBuilder();
+        susernames.append("ALLUSERS");
+        for(Connection connection : CONNECTIONS){
+            susernames.append(connection.getUSERNAME()).append("\n");
+        }
+        for(Connection connection : CONNECTIONS){
+            Send.send(connection.getSOCKET(), susernames.toString());
+        }
+
     }
 
     public static void addConnection(Connection c) {
@@ -60,7 +70,7 @@ attempts to log in, and a method to verify his or her credentials is run.
 
  */
 
-    public static void readMessage(String message, Connection connection) {
+    public static void readMessage(String message, Connection connection)  {
 
         String[] messageArray = message.split(":::::");
         switch (messageArray[0]) {
@@ -74,15 +84,25 @@ attempts to log in, and a method to verify his or her credentials is run.
 
                 break;
             case "login":
-                if (checkIfUserExists(messageArray[1])) {
+                if (checkIfUserExists(messageArray[1], connection)) {
                     Send.send(connection.getSOCKET(), "loginsuccessful");
-                    StringBuilder users = new StringBuilder();
-                    users.append("ALLUSERS ");
-                    for(String username : usernames){
-                        users.append(username);
-                        users.append(" ");
+                    try {
+                    TimeUnit.SECONDS.sleep(1);
                     }
-                    Send.send(connection.getSOCKET(), users.toString());
+                    catch (InterruptedException e){
+                        System.out.println(e);
+                    }
+
+                    StringBuilder susernames = new StringBuilder();
+
+                    susernames.append("Username: ");
+                    for(Connection c : CONNECTIONS){
+                        susernames.append(c.getUSERNAME()).append(" ");
+                    }
+                    for(Connection c : CONNECTIONS){
+                        Send.send(c.getSOCKET(), susernames.toString());
+                    }
+
 
                 } else {
                     Send.send(connection.getSOCKET(), "loginfailed");
@@ -117,13 +137,13 @@ For future improvement: user/password should be a key-value-map. In its current 
 time on sign up.
  */
 
-    public static boolean checkIfUserExists(String credentials) {
+    public static boolean checkIfUserExists(String credentials, Connection connection) {
         String[] details = credentials.split(":");
         String user = details[0];
         String password = details[1];
         for (String[] users : DETAILS) {
             if (users[0].toLowerCase().equals(user.toLowerCase()) && users[1].equals(password)) {
-                usernames.add(user);
+                connection.setUSERNAME(user);
                 return true;
 
             }
@@ -206,6 +226,7 @@ a Connection object with a socket is passed to it, if it is a Server.
                     Socket socket = ServerSocket.accept();
                     Thread t = new Connection(socket, "Server");
                     t.start();
+
 /*
 */
 
