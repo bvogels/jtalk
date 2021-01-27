@@ -56,9 +56,7 @@ public class Connection extends Thread {
 
             }
             catch (IOException e) {
-                System.out.println(e);
-                Server.deleteConnection(this);
-                
+                e.printStackTrace();
                 break;
             }
         }

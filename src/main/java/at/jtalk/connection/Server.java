@@ -41,6 +41,11 @@ public class Server implements Runnable {
 
 /* A couple of methods to delete or add Connections to the CONNECTIONS list. */
     public static void deleteConnection(Connection connection) {
+        try {
+            connection.getSOCKET().close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
         CONNECTIONS.remove(connection);
         StringBuilder susernames = new StringBuilder();
 
@@ -48,6 +53,7 @@ public class Server implements Runnable {
         for(Connection c : CONNECTIONS){
             susernames.append(c.getUSERNAME()).append(" ");
         }
+        System.out.println(CONNECTIONS);
         for(Connection c : CONNECTIONS){
             Send.send(c.getSOCKET(), susernames.toString());
         }
@@ -71,47 +77,53 @@ attempts to log in, and a method to verify his or her credentials is run.
 
  */
 
-    public static void readMessage(String message, Connection connection)  {
-
-        String[] messageArray = message.split(":::::");
-        switch (messageArray[0]) {
-            case "sendall":
-                for (Connection c : CONNECTIONS) {
-                    Send.send(c.getSOCKET(), messageArray[1]);
-                }
-                break;
-            case "Sign In":
-                signIn(messageArray[1]);
-
-                break;
-            case "login":
-                if (checkIfUserExists(messageArray[1], connection)) {
-                    Send.send(connection.getSOCKET(), "loginsuccessful");
-                    try {
-                    TimeUnit.SECONDS.sleep(1);
+    public static void readMessage(String message, Connection connection){
+        try {
+            String[] messageArray = message.split(":::::");
+            switch (messageArray[0]) {
+                case "sendall":
+                    for (Connection c : CONNECTIONS) {
+                        Send.send(c.getSOCKET(), messageArray[1]);
                     }
-                    catch (InterruptedException e){
-                        System.out.println(e);
+                    break;
+                case "Sign In":
+                    signIn(messageArray[1]);
+
+                    break;
+                case "login":
+                    if (checkIfUserExists(messageArray[1], connection)) {
+                        Send.send(connection.getSOCKET(), "loginsuccessful");
+                        try {
+                            TimeUnit.SECONDS.sleep(1);
+                        } catch (InterruptedException e) {
+                            System.out.println(e);
+                        }
+
+                        StringBuilder susernames = new StringBuilder();
+
+                        susernames.append("Username: ");
+                        for (Connection c : CONNECTIONS) {
+                            susernames.append(c.getUSERNAME()).append(" ");
+                        }
+                        for (Connection c : CONNECTIONS) {
+                            Send.send(c.getSOCKET(), susernames.toString());
+                        }
+
+
+                    } else {
+                        Send.send(connection.getSOCKET(), "loginfailed");
+                        CONNECTIONS.remove(connection);
                     }
+                    break;
+            }
 
-                    StringBuilder susernames = new StringBuilder();
+            } catch (Exception ioException) {
+                ioException.printStackTrace();
+                deleteConnection(connection);
+            }
 
-                    susernames.append("Username: ");
-                    for(Connection c : CONNECTIONS){
-                        susernames.append(c.getUSERNAME()).append(" ");
-                    }
-                    for(Connection c : CONNECTIONS){
-                        Send.send(c.getSOCKET(), susernames.toString());
-                    }
-
-
-                } else {
-                    Send.send(connection.getSOCKET(), "loginfailed");
-                    Server.deleteConnection(connection);
-                };
-                break;
         }
-    }
+
 
 /* The data of the file users.txt is read into an ArrayList, where each element of the ArrayList is a list with three fields, containing name
 password, and ip address. Thus, the validity of the credentials are checked not on the file directly but in the ArrayList.
