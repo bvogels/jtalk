@@ -226,6 +226,7 @@ a Connection object with a socket is passed to it, if it is a Server.
                 try {
                     Socket socket = ServerSocket.accept();
                     Thread t = new Connection(socket, "Server");
+                    t.setDaemon(true);
                     t.start();
 
 /*

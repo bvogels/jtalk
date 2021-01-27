@@ -61,6 +61,7 @@ public class Client extends Send {
                 loginWindowController.serverHasStarted = true;
                 System.out.println(socket);
                 Thread t = new Connection(socket, "Client");
+                t.setDaemon(true);
                 t.start();
             }
 

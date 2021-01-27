@@ -108,8 +108,9 @@ user details are loaded through the method populateUserDataList().
 
                     int port = Integer.parseInt(usernameportfield.getText());
                     Thread startserver = new Thread(new Server(port));
-                    Server.setConnectionLabel(labelConnection);
+                    startserver.setDaemon(true);
                     startserver.start();
+                    Server.setConnectionLabel(labelConnection);
                     Server.populateUserDataList();
                     if(serverHasStarted) {
                         loginConCirc.setFill(Color.GREEN);
