@@ -9,6 +9,7 @@ public class Messages {
     public Messages () {
         this.message = message;
         //this.timestamp = Date.getTime();
+        //test
 
     }
 

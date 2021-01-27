@@ -68,6 +68,7 @@ pressing the start button (don't forget to do this.)
 
         try {
             if (!runAsServer.isSelected()) {
+
                 //Connection
                 if (checkIfFilled()) {
                     Client client = connectToServer();
@@ -148,6 +149,7 @@ user details are loaded through the method populateUserDataList().
     @FXML
     public void checkBox() {
         if(runAsServer.isSelected()){
+            runAsServer.setText("Server mode");
             userLabel.setText("Port");
             passwordField.setVisible(false);
             passwordLabel.setVisible(false);
@@ -157,6 +159,7 @@ user details are loaded through the method populateUserDataList().
             labelConnection.setVisible(false);
         }
         else{
+            runAsServer.setText("Client mode");
             userLabel.setText("Username");
             passwordField.setVisible(true);
             passwordLabel.setVisible(true);
